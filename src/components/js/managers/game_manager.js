@@ -2,13 +2,18 @@ import { Grid } from './grid'
 import { Tile } from './tile'
 
 class GameManager {
-  constructor(size, InputManager, Actuator, StorageManager) {
-    this.size = size // Size of the grid
+  constructor(InputManager, Actuator, StorageManager, _getGameData, _updateGameData, _setupCallback) {
+
+    this.getGameData = _getGameData
+    this.updateGameData = _updateGameData
+    this.setupCallback = _setupCallback
+  
+    this.size = this.getGameData().gameSize // Size of the grid
+    this.startTiles = this.getGameData().startTiles
+    
     this.inputManager = new InputManager()
     this.storageManager = new StorageManager()
     this.actuator = new Actuator()
-  
-    this.startTiles = 2
   
     this.inputManager.on("move", this.move.bind(this))
     this.inputManager.on("restart", this.restart.bind(this))
@@ -26,38 +31,44 @@ class GameManager {
 
   // Keep playing after winning (allows going over 2048)
   keepPlaying() {
-    this.keepPlaying = true;
+    this.updateGameData({ keepPlaying: true})
     this.actuator.continueGame() // Clear the game won/lost message
   }
 
   // Return true if the game is lost, or has won and the user hasn't kept playing
   isGameTerminated() {
-    return this.over || (this.won && !this.keepPlaying)
+    let gameData = this.getGameData()
+    return !gameData.login || gameData.over || (gameData.won && !gameData.keepPlaying)
   }
 
   // Set up the game
-  setup() {
+  async setup() {
     var previousState = this.storageManager.getGameState()
   
     // Reload the game from a previous game if present
     if (previousState) {
       this.grid = new Grid(previousState.grid.size, previousState.grid.cells) // Reload grid
-      this.score = previousState.score
-      this.over = previousState.over
-      this.won = previousState.won
-      this.keepPlaying = previousState.keepPlaying
+      this.updateGameData({
+        score: previousState.score,
+        over: previousState.over,
+        won: previousState.won,
+        keepPlaying: previousState.keepPlaying
+      })
     } else {
       this.grid = new Grid(this.size)
-      this.score = 0
-      this.over = false
-      this.won = false
-      this.keepPlaying = false
-  
+      this.updateGameData({
+        score: 0,
+        over: false,
+        won: false,
+        keepPlaying: false
+      })
+
       // Add the initial tiles
       this.addStartTiles()
     }
-  
+
     // Update the actuator
+    await this.setupCallback()
     this.actuate()
   }
 
@@ -80,34 +91,32 @@ class GameManager {
 
   // Sends the updated grid to the actuator
   actuate() {
-    if (this.storageManager.getBestScore() < this.score) {
-      this.storageManager.setBestScore(this.score)
+    if (this.storageManager.getBestScore() < this.getGameData().score) {
+      this.storageManager.setBestScore(this.getGameData().score)
     }
   
     // Clear the state when the game is over (game over only, not win)
-    if (this.over) {
+    if (this.getGameData().over) {
       this.storageManager.clearGameState()
     } else {
       this.storageManager.setGameState(this.serialize())
     }
-  
-    this.actuator.actuate(this.grid, {
+    
+    this.updateGameData({
       score: this.score,
       over: this.over,
       won: this.won,
       bestScore: this.storageManager.getBestScore(),
       terminated: this.isGameTerminated()
     })
+    this.actuator.actuate(this.grid, this.getGameData())
   }
 
   // Represent the current game as an object
   serialize() {
     return {
       grid: this.grid.serialize(),
-      score: this.score,
-      over: this.over,
-      won: this.won,
-      keepPlaying: this.keepPlaying
+      ...this.getGameData()
     }
   }
 
@@ -166,10 +175,10 @@ class GameManager {
             tile.updatePosition(positions.next)
   
             // Update the score
-            self.score += merged.value
+            self.updateGameData({ score: self.getGameData().score + merged.value })
   
             // The mighty 2048 tile
-            if (merged.value === 2048) self.won = true
+            if (merged.value === 2048) self.updateGameData({ won: true })
           } else {
             self.moveTile(tile, positions.farthest)
           }
@@ -184,7 +193,7 @@ class GameManager {
     if (moved) {
       this.addRandomTile()
       if (!this.movesAvailable()) {
-        this.over = true // Game over!
+        this.updateGameData({ over: true})// Game over!
       }
       this.actuate()
     }

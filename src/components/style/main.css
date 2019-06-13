@@ -54,6 +54,7 @@ h1.title {
   position: relative;
   display: inline-block;
   background: #bbada0;
+  margin-left: 5px;
   padding: 15px 25px;
   font-size: 25px;
   height: 25px;

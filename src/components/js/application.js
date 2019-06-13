@@ -1,10 +1,16 @@
 import { GameManager, KeyboardInputManager, HTMLActuator, LocalStorageManager } from './managers'
 
-const application = () => {
+const application = (getGameData, updateGameData, setupCallback) => {
   window.requestAnimationFrame(function () {
-      console.log("start application!")
-      new GameManager(4, KeyboardInputManager, HTMLActuator, LocalStorageManager);
-  });
+      new GameManager(
+        KeyboardInputManager,
+        HTMLActuator,
+        LocalStorageManager,
+        getGameData,
+        updateGameData,
+        setupCallback
+        )
+  })
 }
 
 export { application }

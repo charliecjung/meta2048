@@ -1,0 +1,78 @@
+.menu {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 24px 16px 24px 16px;
+    background: rgba(255, 255, 255, 1);
+    z-index: 100;
+    text-align: center;
+    -webkit-animation: fade-in 800ms;
+    -moz-animation: fade-in 800ms;
+    animation: fade-in 800ms;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.menu p {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.menu .btn {
+    display: block;
+    background: #8f7a66;
+    border-radius: 3px;
+    padding: 0 20px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #f9f6f2;
+    height: 48x;
+    line-height: 48px;
+}
+
+.menu .btn.false {
+  background: rgb(187, 173, 160);
+  cursor: default ;
+}
+
+@media screen and (max-width: 520px) {
+  .menu {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 24px 16px 24px 16px;
+    background: rgba(255, 255, 255, 1);
+    z-index: 100;
+    text-align: center;
+    -webkit-animation: fade-in 800ms ease 400ms;
+    -moz-animation: fade-in 800ms ease 400ms;
+    animation: fade-in 800ms ease 400ms;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+
+  .menu p {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .menu .btn {
+      display: block;
+      background: #8f7a66;
+      border-radius: 3px;
+      padding: 0 20px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: #f9f6f2;
+      height: 48x;
+      line-height: 48px;
+  }
+}

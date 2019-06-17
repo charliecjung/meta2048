@@ -24,7 +24,8 @@ class App extends React.Component {
         terminated: false,
         keepPlaying: false
       }),
-      loading: true
+      showMenu: true,
+      firstUse: true
     }
 
     this.data = {
@@ -34,24 +35,17 @@ class App extends React.Component {
     this.setupCallback = this.setupCallback.bind(this)
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
+
+    this.showMenu = this.showMenu.bind(this)
   }
 
   componentDidMount () {
-    this.initGame()
-  }
-
-  initGame () {
     gameScript.classlist_polyfill()
     gameScript.animframe_polyfill()
-    gameScript.application(
-      this.getGameData, 
-      this.updateGameData,
-      this.setupCallback
-    )
   }
 
-  async setupCallback () {
-    
+  async setupCallback (actuate) {
+    actuate()
   }
 
   getGameData () {
@@ -62,7 +56,7 @@ class App extends React.Component {
     const { gameData } = this.state
 
     this.setState({
-      gameData: gameData.update('score', score => _state.score  ? _state.score : score)
+      gameData: gameData.update('score', score => (typeof _state.score === 'number')  ? _state.score : score)
         .update('bestScore', bestScore => _state.bestScore ? _state.bestScore : bestScore)
         .update('login', login => (typeof _state.login === 'boolean') ? _state.login : login)
         .update('over', over => (typeof _state.over === 'boolean') ? _state.over : over)
@@ -70,16 +64,64 @@ class App extends React.Component {
         .update('terminated', terminated => (typeof _state.terminated === 'boolean') ? _state.terminated : terminated)
         .update('keepPlaying', keepPlaying => (typeof _state.keepPlaying === 'boolean') ? _state.keepPlaying : keepPlaying)
     })
+  }
+
+  showMenu () {
+    const { gameData } = this.state
     
-    console.log('complete update Game Data', this.getGameData())
+    this.setState({
+      gameData: gameData.set('terminated', true),
+      showMenu: true
+    })
+  }
+
+  login () {
+    // add Login Logic
+    // this.updateGameData({ login: true })
+  }
+
+  resume () {
+    const { gameData } = this.state
+    
+    this.setState({
+      gameData: gameData.set('terminated', false),
+      showMenu: false
+    })
+  }
+
+  startGame () {
+    gameScript.application(
+      this.getGameData, 
+      this.updateGameData,
+      this.setupCallback
+    )
+    this.setState({ showMenu: false, firstUse: false })
+  }
+
+  getMenuScreen () {
+    if(!this.state.showMenu) return
+
+    let isLogin = this.state.gameData.get('login')
+    let isFirstTime = this.state.firstUse
+    return (
+      <div className="menu">
+        <p>Menu</p>
+        {isFirstTime ? null : <span className="resume btn" onClick={() => this.resume()}>Resume</span>}
+        <span className="start btn" onClick={() => this.startGame()}>New Game</span>
+        <span className="login btn" onClick={() => this.login()}>Login</span>
+        <span className={"my-score btn " + isLogin}>My Score</span>
+        <span className={"ranking btn " + isLogin}>Rankging</span>
+      </div>
+    )
   }
 
   render () {
     return (
       <div className="container">
         <Heading/>
-        <Above/>
+        <Above showMenu={this.showMenu}/>
         <div className="game-container">
+          {this.getMenuScreen()}
           <Message/>
           <Grid/>
           <div className="tile-container"/>

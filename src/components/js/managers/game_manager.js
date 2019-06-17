@@ -12,12 +12,14 @@ class GameManager {
     this.startTiles = this.getGameData().startTiles
     
     this.inputManager = new InputManager()
-    this.storageManager = new StorageManager()
+    this.storageManager = new StorageManager(this.getGameData().login)
     this.actuator = new Actuator()
   
     this.inputManager.on("move", this.move.bind(this))
     this.inputManager.on("restart", this.restart.bind(this))
     this.inputManager.on("keepPlaying", this.keepPlaying.bind(this))
+
+    this.actuate = this.actuate.bind(this)
   
     this.setup()
   }
@@ -36,10 +38,11 @@ class GameManager {
   }
 
   // Return true if the game is lost, or has won and the user hasn't kept playing
+  /*
   isGameTerminated() {
     let gameData = this.getGameData()
-    return !gameData.login || gameData.over || (gameData.won && !gameData.keepPlaying)
-  }
+    return gameData.over || (gameData.won && !gameData.keepPlaying)
+  }*/
 
   // Set up the game
   async setup() {
@@ -68,8 +71,7 @@ class GameManager {
     }
 
     // Update the actuator
-    await this.setupCallback()
-    this.actuate()
+    await this.setupCallback(this.actuate)
   }
 
   // Set up the initial tiles to start the game with
@@ -103,11 +105,7 @@ class GameManager {
     }
     
     this.updateGameData({
-      score: this.score,
-      over: this.over,
-      won: this.won,
-      bestScore: this.storageManager.getBestScore(),
-      terminated: this.isGameTerminated()
+      bestScore: this.storageManager.getBestScore()
     })
     this.actuator.actuate(this.grid, this.getGameData())
   }
@@ -142,7 +140,7 @@ class GameManager {
     // 0: up, 1: right, 2: down, 3: left
     var self = this
   
-    if (this.isGameTerminated()) return // Don't do anything if the game's over
+    if (this.getGameData().terminated) return // Don't do anything if the game's over
   
     var cell, tile
   

@@ -19,12 +19,15 @@ window.fakeStorage = {
 }
 
 class LocalStorageManager {
-  constructor() {
+  constructor(isLogin) {
     this.bestScoreKey = "bestScore"
     this.gameStateKey = "gameState"
 
-    var supported = this.localStorageSupported()
-    this.storage = supported ? window.localStorage : window.fakeStorage
+    this.storage = isLogin ? { method: "server", storage: "get server storage or contact logic here"}
+    : this.localStorageSupported() ? { method: "local", storage: window.localStorage }
+    : { method: "fake", storage: window.fakeStorage }
+
+    console.log(this.storage)
   }
 
   localStorageSupported() {
@@ -34,7 +37,8 @@ class LocalStorageManager {
       var storage = window.localStorage
       storage.setItem(testKey, "1")
       storage.removeItem(testKey)
-      return true
+      // if you want to use local storage, change it true
+      return false
     } catch (error) {
       return false
     }
@@ -42,25 +46,45 @@ class LocalStorageManager {
   
   // Best score getters/setters
   getBestScore() {
-    return this.storage.getItem(this.bestScoreKey) || 0
+    if(this.storage.method === "server") {
+      // get best score logic here
+    } else {
+      return this.storage.storage.getItem(this.bestScoreKey) || 0
+    }
   }
   
   setBestScore(score) {
-    this.storage.setItem(this.bestScoreKey, score)
+    if(this.storage.method === "server") {
+      // set score logic here
+    } else {
+      this.storage.storage.setItem(this.bestScoreKey, score)
+    }
   }
   
   // Game state getters/setters and clearing
   getGameState() {
-    var stateJSON = this.storage.getItem(this.gameStateKey)
-    return stateJSON ? JSON.parse(stateJSON) : null
+    if(this.storage.method === "server") {
+      // get state logic here
+    } else {
+      let stateJSON = this.storage.storage.getItem(this.gameStateKey)
+      return stateJSON ? JSON.parse(stateJSON) : null
+    }
   }
   
   setGameState(gameState) {
-    this.storage.setItem(this.gameStateKey, JSON.stringify(gameState))
+    if(this.storage.method === "server") {
+      // set state logic here
+    } else {
+      this.storage.storage.setItem(this.gameStateKey, JSON.stringify(gameState))
+    }
   }
   
   clearGameState() {
-    this.storage.removeItem(this.gameStateKey)
+    if(this.storage.method === "server") {
+      // clear state logic here
+    } else {
+      this.storage.storage.removeItem(this.gameStateKey)
+    }
   }
 }
 

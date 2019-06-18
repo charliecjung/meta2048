@@ -6,6 +6,7 @@ import './App.css'
 import './components/style/main.css'
 import gameScript from './components/js'
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
+import { Menu, MyBoard, RankBoard } from './components/menu';
 
 class App extends React.Component {
 
@@ -25,6 +26,7 @@ class App extends React.Component {
         keepPlaying: false
       }),
       showMenu: true,
+      selectTopic: 'menu',
       firstUse: true
     }
 
@@ -37,6 +39,10 @@ class App extends React.Component {
     this.updateGameData = this.updateGameData.bind(this)
 
     this.showMenu = this.showMenu.bind(this)
+    this.resume = this.resume.bind(this)
+    this.startGame = this.startGame.bind(this)
+    this.login = this.login.bind(this)
+    this.onClickMenuBtn = this.onClickMenuBtn.bind(this)
   }
 
   componentDidMount () {
@@ -63,7 +69,14 @@ class App extends React.Component {
         .update('won', won => (typeof _state.won === 'boolean') ? _state.won : won)
         .update('terminated', terminated => (typeof _state.terminated === 'boolean') ? _state.terminated : terminated)
         .update('keepPlaying', keepPlaying => (typeof _state.keepPlaying === 'boolean') ? _state.keepPlaying : keepPlaying)
-    })
+    }, this.isTerminated)
+  }
+
+  isTerminated () {
+    const { gameData } = this.state
+    const terminated = this.state.showMenu || this.state.gameData.get('over') || (this.state.gameData.get('won') && !this.state.gameData.get('keepPlaying'))
+
+    this.setState({ gameData: gameData.set('terminated', terminated) })
   }
 
   showMenu () {
@@ -71,13 +84,14 @@ class App extends React.Component {
     
     this.setState({
       gameData: gameData.set('terminated', true),
-      showMenu: true
+      showMenu: true,
+      selectTopic: 'menu'
     })
   }
 
   login () {
     // add Login Logic
-    // this.updateGameData({ login: true })
+    this.updateGameData({ login: true })
   }
 
   resume () {
@@ -101,18 +115,28 @@ class App extends React.Component {
   getMenuScreen () {
     if(!this.state.showMenu) return
 
+    let topic = this.state.selectTopic
     let isLogin = this.state.gameData.get('login')
     let isFirstTime = this.state.firstUse
-    return (
-      <div className="menu">
-        <p>Menu</p>
-        {isFirstTime ? null : <span className="resume btn" onClick={() => this.resume()}>Resume</span>}
-        <span className="start btn" onClick={() => this.startGame()}>New Game</span>
-        <span className="login btn" onClick={() => this.login()}>Login</span>
-        <span className={"my-score btn " + isLogin}>My Score</span>
-        <span className={"ranking btn " + isLogin}>Rankging</span>
-      </div>
-    )
+
+    switch(topic) {
+      case 'myScore':
+        return <MyBoard />
+      case 'rankBoard':
+        return <RankBoard />
+      default:
+        return <Menu
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        login={this.login}
+        onClickMenuBtn={this.onClickMenuBtn} />
+    }
+  }
+
+  onClickMenuBtn (topic) {
+    if(this.state.gameData.get('login')) this.setState({ selectTopic: topic })
   }
 
   render () {
@@ -121,7 +145,7 @@ class App extends React.Component {
         <Heading/>
         <Above showMenu={this.showMenu}/>
         <div className="game-container">
-          {this.getMenuScreen()}
+          {this.state.showMenu ? <div className="menu"> {this.getMenuScreen()} </div> : null}
           <Message/>
           <Grid/>
           <div className="tile-container"/>

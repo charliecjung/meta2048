@@ -23,6 +23,8 @@ class LocalStorageManager {
     this.bestScoreKey = "bestScore"
     this.gameStateKey = "gameState"
 
+    isLogin = false
+
     this.storage = isLogin ? { method: "server", storage: "get server storage or contact logic here"}
     : this.localStorageSupported() ? { method: "local", storage: window.localStorage }
     : { method: "fake", storage: window.fakeStorage }

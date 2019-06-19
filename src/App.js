@@ -20,7 +20,9 @@ class App extends React.Component {
         startTiles: 2,
         score: 0,
         bestScore: 0,
-        login: false,
+        //debugging purposes
+        //login: false,
+        login: true,
         over: false,
         won: false,
         terminated: false,

@@ -6,7 +6,8 @@ import './App.css'
 import './components/style/main.css'
 import gameScript from './components/js'
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
-import { Menu, MyBoard, RankBoard } from './components/menu';
+import { Menu, MyBoard, RankBoard } from './components/menu'
+import Network from './components/network'
 
 class App extends React.Component {
 
@@ -25,23 +26,24 @@ class App extends React.Component {
         terminated: false,
         keepPlaying: false
       }),
+      firstUse: true,
       showMenu: true,
-      selectTopic: 'menu',
-      firstUse: true
+      selectTopic: 'menu'
     }
 
     this.data = {
       user: { name: '', score: '', highscore: '' }
     }
 
-    this.setupCallback = this.setupCallback.bind(this)
+    // related with game data
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
 
+    // related with Menu
     this.showMenu = this.showMenu.bind(this)
     this.resume = this.resume.bind(this)
     this.startGame = this.startGame.bind(this)
-    this.login = this.login.bind(this)
+    this.loginCallback = this.loginCallback.bind(this)
     this.onClickMenuBtn = this.onClickMenuBtn.bind(this)
   }
 
@@ -50,9 +52,7 @@ class App extends React.Component {
     gameScript.animframe_polyfill()
   }
 
-  async setupCallback (actuate) {
-    actuate()
-  }
+  // related with game data
 
   getGameData () {
     return { ...this.state.gameData.toJS() }
@@ -79,6 +79,7 @@ class App extends React.Component {
     this.setState({ gameData: gameData.set('terminated', terminated) })
   }
 
+  // related with menu
   showMenu () {
     const { gameData } = this.state
     
@@ -89,9 +90,29 @@ class App extends React.Component {
     })
   }
 
-  login () {
-    // add Login Logic
-    this.updateGameData({ login: true })
+  getMenuScreen () {
+    let topic = this.state.selectTopic
+    let isLogin = this.state.gameData.get('login')
+    let isFirstTime = this.state.firstUse
+
+    switch(topic) {
+      case 'login':
+        return <Network
+          topic="login"
+          callback={this.loginCallback}
+        />
+      case 'myScore':
+        return <MyBoard />
+      case 'rankBoard':
+        return <RankBoard />
+      default:
+        return <Menu
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn} />
+    }
   }
 
   resume () {
@@ -107,36 +128,22 @@ class App extends React.Component {
     gameScript.application(
       this.getGameData, 
       this.updateGameData,
-      this.setupCallback
+      this.state.firstUse
     )
     this.setState({ showMenu: false, firstUse: false })
   }
 
-  getMenuScreen () {
-    if(!this.state.showMenu) return
-
-    let topic = this.state.selectTopic
-    let isLogin = this.state.gameData.get('login')
-    let isFirstTime = this.state.firstUse
-
-    switch(topic) {
-      case 'myScore':
-        return <MyBoard />
-      case 'rankBoard':
-        return <RankBoard />
-      default:
-        return <Menu
-        isFirstTime={isFirstTime}
-        isLogin = {isLogin}
-        resume={this.resume}
-        startGame={this.startGame}
-        login={this.login}
-        onClickMenuBtn={this.onClickMenuBtn} />
-    }
+  onClickMenuBtn (topic) {
+    if(this.state.gameData.get('login') || topic === "login") this.setState({ selectTopic: topic })
   }
 
-  onClickMenuBtn (topic) {
-    if(this.state.gameData.get('login')) this.setState({ selectTopic: topic })
+  loginCallback (result) {
+    const { gameData } = this.state
+
+    this.setState({
+      gameData: gameData.set('login', result),
+      selectTopic: 'menu'
+    })
   }
 
   render () {

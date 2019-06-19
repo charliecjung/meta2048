@@ -2,11 +2,10 @@ import { Grid } from './grid'
 import { Tile } from './tile'
 
 class GameManager {
-  constructor(InputManager, Actuator, StorageManager, _getGameData, _updateGameData, _setupCallback) {
+  constructor(InputManager, Actuator, StorageManager, _getGameData, _updateGameData, firstUse) {
 
     this.getGameData = _getGameData
     this.updateGameData = _updateGameData
-    this.setupCallback = _setupCallback
   
     this.size = this.getGameData().gameSize // Size of the grid
     this.startTiles = this.getGameData().startTiles
@@ -21,7 +20,7 @@ class GameManager {
 
     this.actuate = this.actuate.bind(this)
   
-    this.setup()
+    firstUse ? this.setup() : this.restart()
   }
 
   // Restart the game
@@ -71,7 +70,7 @@ class GameManager {
     }
 
     // Update the actuator
-    await this.setupCallback(this.actuate)
+    this.actuate()
   }
 
   // Set up the initial tiles to start the game with

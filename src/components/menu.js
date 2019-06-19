@@ -8,7 +8,7 @@ const Menu = ({ isFirstTime, isLogin, resume, startGame, onClickMenuBtn }) =>
   <span className="start btn" onClick={() => startGame()}>New Game</span>
   <span className="login btn" onClick={() => onClickMenuBtn('login')}>Login</span>
   <span className={"my-score btn " + isLogin} onClick={() => onClickMenuBtn('myScore')}>My Score</span>
-  <span className={"ranking btn " + isLogin} onClick={() => onClickMenuBtn('rankBoard')}>Rankging</span>
+  <span className="ranking btn" onClick={() => onClickMenuBtn('rankBoard')}>Rankging</span>
 </div>
 
 const MyBoard = () =>

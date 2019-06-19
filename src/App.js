@@ -134,7 +134,8 @@ class App extends React.Component {
   }
 
   onClickMenuBtn (topic) {
-    if(this.state.gameData.get('login') || topic === "login") this.setState({ selectTopic: topic })
+    if(topic === 'myScore' && !this.state.gameData.get('login')) return
+    this.setState({ selectTopic: topic })
   }
 
   loginCallback (result) {

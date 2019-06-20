@@ -42,7 +42,7 @@ result.push(
     </table>
 
     </table>
-           <span className={"register-scoreboard btn " + isLogin} onClick={() => onClickMenuBtn('myScore')}>Register Score (scoreboard)</span>
+           <span className={"register-scoreboard btn " + isLogin} onClick={() => onClickMenuBtn('register-scoreboard')}>Register Score (scoreboard)</span>
     </body>
     </div>
   )
@@ -78,7 +78,7 @@ result.push(
     </table>
 
     </table>
-    <span className={"register-rankboard btn " + isLogin} onClick={() => onClickMenuBtn('rankBoard')}>Register Score (rankboard)</span>
+    <span className={"register-rankboard btn " + isLogin} onClick={() => onClickMenuBtn('register-rankboard')}>Register Score (rankboard)</span>
     </body>
     </div>
   )

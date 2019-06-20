@@ -114,14 +114,13 @@ class App extends React.Component {
     let isFirstTime = this.state.firstUse
 
     switch(topic) {
-            
+      
       case 'login':
         return <Network
           topic="login"
           callback={this.loginCallback}
         />
-
-
+      
       case 'myScore':
 
         return <MyBoard
@@ -143,7 +142,7 @@ class App extends React.Component {
             />
       //@title register-scoreboard: "Register Score button for Scoreboard
       case 'register-scoreboard':
-        return <register-scoreboard
+        return <MyBoard
         back={this.back}
         isFirstTime={isFirstTime}
         isLogin = {isLogin}
@@ -153,7 +152,7 @@ class App extends React.Component {
             />
        //@title register-rankboard: "Register Score button for Rankboard
       case 'register-rankboard':
-        return <register-rankboard
+        return <RankBoard
         back={this.back}
         isFirstTime={isFirstTime}
         isLogin = {isLogin}
@@ -196,11 +195,22 @@ class App extends React.Component {
   }
 
   onClickMenuBtn (topic) {
-    //alert("topic: " + topic);
-    if(topic === 'myScore' && !this.state.gameData.get('login')) return
-    if(topic === 'rankBoard' && !this.state.gameData.get('login')) return
-    if(topic === 'register-scoreboard' && !this.state.gameData.get('over')) return
-    if(topic === 'register-rankboard' && !this.state.gameData.get('over')) return
+    if(topic === 'myScore' && !this.state.gameData.get('login')) {
+      alert("You have to be logged in.");
+      return;
+    }
+    if(topic === 'rankBoard' && !this.state.gameData.get('login')) {
+      alert("You have to be logged in.");
+      return;
+    }
+    if(topic === 'register-scoreboard' && !this.state.gameData.get('over')) {
+      alert("The game has to be over for you to register your score.");
+      return;
+    }
+    if(topic === 'register-rankboard' && !this.state.gameData.get('over')) {
+      alert("The game has to be over for you to register your score.");
+      return;
+    }
     this.setState({ selectTopic: topic })
   }
   loginCallback (result) {

@@ -21,9 +21,7 @@ class App extends React.Component {
         startTiles: 2,
         score: 0,
         bestScore: 0,
-        //debugging purposes
-        //login: false,
-        login: true,
+        login: false,
         over: false,
         won: false,
         terminated: false,
@@ -38,7 +36,7 @@ class App extends React.Component {
       user: { name: '', score: '', highscore: '' }
     }
 
-     
+
 
 
 
@@ -102,7 +100,7 @@ class App extends React.Component {
   // related with menu
   showMenu () {
     const { gameData } = this.state
-    
+
     this.setState({
       gameData: gameData.set('terminated', true),
       showMenu: true,
@@ -116,21 +114,24 @@ class App extends React.Component {
     let isFirstTime = this.state.firstUse
 
     switch(topic) {
+            
       case 'login':
         return <Network
           topic="login"
           callback={this.loginCallback}
         />
+
+
       case 'myScore':
-            
+
         return <MyBoard
         back={this.back}
         isFirstTime={isFirstTime}
         isLogin = {isLogin}
         resume={this.resume}
         startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn} 
-       /> 
+        onClickMenuBtn={this.onClickMenuBtn}
+       />
       case 'rankBoard':
         return <RankBoard
         back={this.back}
@@ -138,7 +139,7 @@ class App extends React.Component {
         isLogin = {isLogin}
         resume={this.resume}
         startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn} 
+        onClickMenuBtn={this.onClickMenuBtn}
             />
       //@title register-scoreboard: "Register Score button for Scoreboard
       case 'register-scoreboard':
@@ -148,7 +149,7 @@ class App extends React.Component {
         isLogin = {isLogin}
         resume={this.resume}
         startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn} 
+        onClickMenuBtn={this.onClickMenuBtn}
             />
        //@title register-rankboard: "Register Score button for Rankboard
       case 'register-rankboard':
@@ -158,7 +159,7 @@ class App extends React.Component {
         isLogin = {isLogin}
         resume={this.resume}
         startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn} 
+        onClickMenuBtn={this.onClickMenuBtn}
             />
 
       default:
@@ -187,7 +188,7 @@ class App extends React.Component {
 
   startGame () {
     gameScript.application(
-      this.getGameData, 
+      this.getGameData,
       this.updateGameData,
       this.state.firstUse
     )
@@ -195,7 +196,11 @@ class App extends React.Component {
   }
 
   onClickMenuBtn (topic) {
+    //alert("topic: " + topic);
     if(topic === 'myScore' && !this.state.gameData.get('login')) return
+    if(topic === 'rankBoard' && !this.state.gameData.get('login')) return
+    if(topic === 'register-scoreboard' && !this.state.gameData.get('login')) return
+    if(topic === 'register-rankboard' && !this.state.gameData.get('login')) return
     this.setState({ selectTopic: topic })
   }
   loginCallback (result) {

@@ -31,23 +31,7 @@ class App extends React.Component {
       showMenu: true,
       selectTopic: 'menu'
     }
-
-    this.data = {
-      user: { name: '', score: '', highscore: '' }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
     // related with game data
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
@@ -177,7 +161,6 @@ class App extends React.Component {
   }
 
   resume () {
-
     const { gameData } = this.state
     this.setState({
       gameData: gameData.set('terminated', false),

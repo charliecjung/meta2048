@@ -1,13 +1,12 @@
 import React from 'react'
 import { Map } from 'immutable'
 
-// Styles & JS
 import './App.css'
 import './components/style/main.css'
 import gameScript from './components/js'
+import constants from './constants'
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
-import { Menu, MyBoard, RankBoard } from './components/menu'
-import Network from './components/network'
+import { Menu, RankBoard } from './components/menu'
 
 class App extends React.Component {
 
@@ -17,11 +16,10 @@ class App extends React.Component {
 
     this.state = {
       gameData: Map({
-        gameSize: 4,
-        startTiles: 2,
+        gameSize: constants.gameData.gameSize,
+        startTiles: constants.gameData.startTiles,
         score: 0,
         bestScore: 0,
-        login: false,
         over: false,
         won: false,
         terminated: false,
@@ -40,13 +38,9 @@ class App extends React.Component {
     this.showMenu = this.showMenu.bind(this)
     this.resume = this.resume.bind(this)
     this.startGame = this.startGame.bind(this)
-    this.loginCallback = this.loginCallback.bind(this)
-    this.onClickMenuBtn = this.onClickMenuBtn.bind(this)
-
-    //related with scoreboard
-    this.back = this.back.bind(this)
-
-    //related with rankings
+    this.showRank = this.showRank.bind(this)
+    this.loadGame = this.loadGame.bind(this)
+    this.backToMain = this.backToMain.bind(this)
   }
 
   componentDidMount () {
@@ -55,7 +49,6 @@ class App extends React.Component {
   }
 
   // related with game data
-
   getGameData () {
     return { ...this.state.gameData.toJS() }
   }
@@ -66,10 +59,8 @@ class App extends React.Component {
     this.setState({
       gameData: gameData.update('score', score => (typeof _state.score === 'number')  ? _state.score : score)
         .update('bestScore', bestScore => _state.bestScore ? _state.bestScore : bestScore)
-        .update('login', login => (typeof _state.login === 'boolean') ? _state.login : login)
         .update('over', over => (typeof _state.over === 'boolean') ? _state.over : over)
         .update('won', won => (typeof _state.won === 'boolean') ? _state.won : won)
-        .update('terminated', terminated => (typeof _state.terminated === 'boolean') ? _state.terminated : terminated)
         .update('keepPlaying', keepPlaying => (typeof _state.keepPlaying === 'boolean') ? _state.keepPlaying : keepPlaying)
     }, this.isTerminated)
   }
@@ -78,7 +69,7 @@ class App extends React.Component {
     const { gameData } = this.state
     const terminated = this.state.showMenu || this.state.gameData.get('over') || (this.state.gameData.get('won') && !this.state.gameData.get('keepPlaying'))
 
-    this.setState({ gameData: gameData.set('terminated', terminated) })
+    if( gameData.get('terminated') !== terminated) this.setState({ gameData: gameData.set('terminated', terminated) })
   }
 
   // related with menu
@@ -88,76 +79,32 @@ class App extends React.Component {
     this.setState({
       gameData: gameData.set('terminated', true),
       showMenu: true,
-      selectTopic: 'menu'
+      selectTopic: 'main'
     })
   }
 
   getMenuScreen () {
     let topic = this.state.selectTopic
-    let isLogin = this.state.gameData.get('login')
     let isFirstTime = this.state.firstUse
 
     switch(topic) {
-      
-      case 'login':
-        return <Network
-          topic="login"
-          callback={this.loginCallback}
-        />
-      
-      case 'myScore':
-
-        return <MyBoard
-        back={this.back}
-        isFirstTime={isFirstTime}
-        isLogin = {isLogin}
-        resume={this.resume}
-        startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn}
-       />
       case 'rankBoard':
         return <RankBoard
-        back={this.back}
         isFirstTime={isFirstTime}
-        isLogin = {isLogin}
-        resume={this.resume}
-        startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn}
-            />
-      //@title register-scoreboard: "Register Score button for Scoreboard
-      case 'register-scoreboard':
-        return <MyBoard
-        back={this.back}
-        isFirstTime={isFirstTime}
-        isLogin = {isLogin}
-        resume={this.resume}
-        startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn}
-            />
-       //@title register-rankboard: "Register Score button for Rankboard
-      case 'register-rankboard':
-        return <RankBoard
-        back={this.back}
-        isFirstTime={isFirstTime}
-        isLogin = {isLogin}
-        resume={this.resume}
-        startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn}
-            />
+        back={this.back}/>
 
       default:
         return <Menu
         isFirstTime={isFirstTime}
-        isLogin = {isLogin}
-        //isLogin = "true"
         resume={this.resume}
         startGame={this.startGame}
-        onClickMenuBtn={this.onClickMenuBtn} />
+        showRank={this.showRank}
+        loadGame={this.loadGame} />
     }
   }
-  back () {
-      alert("back() is called");
-      alert("over: " + this.state.gameData.get('over'));
+
+  backToMain () {
+    this.setState({ selectTopic: 'main'})
   }
 
   resume () {
@@ -169,42 +116,17 @@ class App extends React.Component {
   }
 
   startGame () {
-    gameScript.application(
-      this.getGameData,
-      this.updateGameData,
-      this.state.firstUse
-    )
+    gameScript.application(this.getGameData, this.updateGameData)
     this.setState({ showMenu: false, firstUse: false, login: false})
   }
 
-  onClickMenuBtn (topic) {
-    if(topic === 'myScore' && !this.state.gameData.get('login')) {
-      alert("You have to be logged in.");
-      return;
-    }
-    if(topic === 'rankBoard' && !this.state.gameData.get('login')) {
-      alert("You have to be logged in.");
-      return;
-    }
-    if(topic === 'register-scoreboard' && !this.state.gameData.get('over')) {
-      alert("The game has to be over for you to register your score.");
-      return;
-    }
-    if(topic === 'register-rankboard' && !this.state.gameData.get('over')) {
-      alert("The game has to be over for you to register your score.");
-      return;
-    }
-    this.setState({ selectTopic: topic })
-  }
-  loginCallback (result) {
-    const { gameData } = this.state
-
-    this.setState({
-      gameData: gameData.set('login', result),
-      selectTopic: 'menu'
-    })
+  showRank () {
+    this.setState({ selectTopic: 'rankBoard' })
   }
 
+  loadGame () {
+    // Load game logic
+  }
 
   render () {
     return (
@@ -212,7 +134,7 @@ class App extends React.Component {
         <Heading/>
         <Above showMenu={this.showMenu}/>
         <div className="game-container">
-          {this.state.showMenu ? <div className="menu"> {this.getMenuScreen()} </div> : null}
+          {this.state.showMenu ? <div className="menu">{this.getMenuScreen()}</div> : null}
           <Message/>
           <Grid/>
           <div className="tile-container"/>

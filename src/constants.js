@@ -19,6 +19,10 @@ const constants = {
     color: "#8f7a66",
     height: "45",
     width: "45"
+  },
+  gameData: {
+    gameSize: 4,
+    startTiles: 2
   }
 }
 

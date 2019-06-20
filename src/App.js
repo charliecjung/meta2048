@@ -11,6 +11,7 @@ import Network from './components/network'
 
 class App extends React.Component {
 
+
   constructor (props) {
     super(props)
 
@@ -30,7 +31,7 @@ class App extends React.Component {
       showMenu: true,
       selectTopic: 'menu'
     }
-
+    
     // related with game data
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
@@ -41,6 +42,11 @@ class App extends React.Component {
     this.startGame = this.startGame.bind(this)
     this.loginCallback = this.loginCallback.bind(this)
     this.onClickMenuBtn = this.onClickMenuBtn.bind(this)
+
+    //related with scoreboard
+    this.back = this.back.bind(this)
+
+    //related with rankings
   }
 
   componentDidMount () {
@@ -78,7 +84,7 @@ class App extends React.Component {
   // related with menu
   showMenu () {
     const { gameData } = this.state
-    
+
     this.setState({
       gameData: gameData.set('terminated', true),
       showMenu: true,
@@ -92,48 +98,104 @@ class App extends React.Component {
     let isFirstTime = this.state.firstUse
 
     switch(topic) {
+      
       case 'login':
         return <Network
           topic="login"
           callback={this.loginCallback}
         />
+      
       case 'myScore':
-        return <MyBoard />
+
+        return <MyBoard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn}
+       />
       case 'rankBoard':
-        return <RankBoard />
+        return <RankBoard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn}
+            />
+      //@title register-scoreboard: "Register Score button for Scoreboard
+      case 'register-scoreboard':
+        return <MyBoard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn}
+            />
+       //@title register-rankboard: "Register Score button for Rankboard
+      case 'register-rankboard':
+        return <RankBoard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn}
+            />
+
       default:
         return <Menu
         isFirstTime={isFirstTime}
         isLogin = {isLogin}
+        //isLogin = "true"
         resume={this.resume}
         startGame={this.startGame}
         onClickMenuBtn={this.onClickMenuBtn} />
     }
   }
+  back () {
+      alert("back() is called");
+      alert("over: " + this.state.gameData.get('over'));
+  }
 
-  resume (event) {
+  resume () {
     const { gameData } = this.state
-    
     this.setState({
       gameData: gameData.set('terminated', false),
-      showMenu: false
+      showMenu: false,
     })
   }
 
   startGame () {
     gameScript.application(
-      this.getGameData, 
+      this.getGameData,
       this.updateGameData,
       this.state.firstUse
     )
-    this.setState({ showMenu: false, firstUse: false })
+    this.setState({ showMenu: false, firstUse: false, login: false})
   }
 
   onClickMenuBtn (topic) {
-    if(topic === 'myScore' && !this.state.gameData.get('login')) return
+    if(topic === 'myScore' && !this.state.gameData.get('login')) {
+      alert("You have to be logged in.");
+      return;
+    }
+    if(topic === 'rankBoard' && !this.state.gameData.get('login')) {
+      alert("You have to be logged in.");
+      return;
+    }
+    if(topic === 'register-scoreboard' && !this.state.gameData.get('over')) {
+      alert("The game has to be over for you to register your score.");
+      return;
+    }
+    if(topic === 'register-rankboard' && !this.state.gameData.get('over')) {
+      alert("The game has to be over for you to register your score.");
+      return;
+    }
     this.setState({ selectTopic: topic })
   }
-
   loginCallback (result) {
     const { gameData } = this.state
 
@@ -142,6 +204,7 @@ class App extends React.Component {
       selectTopic: 'menu'
     })
   }
+
 
   render () {
     return (

@@ -2,7 +2,7 @@ import { Grid } from './grid'
 import { Tile } from './tile'
 
 class GameManager {
-  constructor(InputManager, Actuator, StorageManager, _getGameData, _updateGameData, firstUse) {
+  constructor(InputManager, Actuator, _getGameData, _updateGameData) {
 
     this.getGameData = _getGameData
     this.updateGameData = _updateGameData
@@ -11,7 +11,6 @@ class GameManager {
     this.startTiles = this.getGameData().startTiles
     
     this.inputManager = new InputManager()
-    this.storageManager = new StorageManager(this.getGameData().login)
     this.actuator = new Actuator()
   
     this.inputManager.on("move", this.move.bind(this))
@@ -20,12 +19,11 @@ class GameManager {
 
     this.actuate = this.actuate.bind(this)
   
-    firstUse ? this.setup() : this.restart()
+    this.setup()
   }
 
   // Restart the game
   restart() {
-    this.storageManager.clearGameState()
     this.actuator.continueGame() // Clear the game won/lost message
     this.setup()
   }
@@ -45,9 +43,22 @@ class GameManager {
 
   // Set up the game
   async setup() {
-    var previousState = this.storageManager.getGameState()
-  
-    // Reload the game from a previous game if present
+    this.grid = new Grid(this.size)
+    this.updateGameData({
+      score: 0,
+      over: false,
+      won: false,
+      keepPlaying: false
+    })
+    this.addStartTiles()
+
+    // Update the actuator
+    this.actuate()
+  }
+/*
+  load() {
+    let previousState = this.storageManager.getGameState()
+
     if (previousState) {
       this.grid = new Grid(previousState.grid.size, previousState.grid.cells) // Reload grid
       this.updateGameData({
@@ -57,22 +68,12 @@ class GameManager {
         keepPlaying: previousState.keepPlaying
       })
     } else {
-      this.grid = new Grid(this.size)
-      this.updateGameData({
-        score: 0,
-        over: false,
-        won: false,
-        keepPlaying: false
-      })
-
-      // Add the initial tiles
-      this.addStartTiles()
+      this.setup()
     }
 
-    // Update the actuator
     this.actuate()
   }
-
+*/
   // Set up the initial tiles to start the game with
   addStartTiles() {
     for (var i = 0; i < this.startTiles; i++) {
@@ -92,20 +93,10 @@ class GameManager {
 
   // Sends the updated grid to the actuator
   actuate() {
-    if (this.storageManager.getBestScore() < this.getGameData().score) {
-      this.storageManager.setBestScore(this.getGameData().score)
-    }
-  
-    // Clear the state when the game is over (game over only, not win)
-    if (this.getGameData().over) {
-      this.storageManager.clearGameState()
-    } else {
-      this.storageManager.setGameState(this.serialize())
-    }
+    let score = this.getGameData().score
+    let bestScore = this.getGameData().bestScore
+    if(score > bestScore) this.updateGameData({ bestScore: score })
     
-    this.updateGameData({
-      bestScore: this.storageManager.getBestScore()
-    })
     this.actuator.actuate(this.grid, this.getGameData())
   }
 

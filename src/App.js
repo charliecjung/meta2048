@@ -109,8 +109,9 @@ class App extends React.Component {
 
   resume () {
     const { gameData } = this.state
+    let isOver = gameData.get('over')
     this.setState({
-      gameData: gameData.set('terminated', false),
+      gameData: gameData.set('terminated', isOver),
       showMenu: false,
     })
   }

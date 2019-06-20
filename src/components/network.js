@@ -21,7 +21,8 @@ class Network extends React.Component {
     this.state = {
       OSName: util.checkOS(),
       session: util.makeSessionID(),
-      qrReady: false
+      qrReady: false,
+      appReady:false
     }
 
     this.checkApplicationInstall = this.checkApplicationInstall.bind(this)
@@ -34,8 +35,7 @@ class Network extends React.Component {
       document.checkframe.location = constants.testUri
       setTimeout(() => this.checkApplicationInstall(visitedAt), 1500)
     } else {
-      //this.makeQR()
-      setTimeout(this.makeQR.bind(this), 1500);
+      this.makeQR()
     }
   }
 
@@ -46,7 +46,10 @@ class Network extends React.Component {
       try {
         // check application 
         let check = document.checkframe.document.body.innerHTML
-        console.log(check)
+        if(!check) {
+          this.setState({ OSName: "notMobile"}, this.makeQR())
+          return
+        }
       } catch (err) {
         if(window.confirm("Keepin is not installed")) {
           window.location.href = constants.googleAppStore
@@ -59,6 +62,8 @@ class Network extends React.Component {
         window.location.href = constants.apppleAppStroe
       }
     }
+
+    this.setState({ appReady: true })
   }
 
   makeQR () {
@@ -75,7 +80,7 @@ class Network extends React.Component {
   }
 
   loading () {
-    let loading = this.state.qrReady ?
+    let loading = (this.state.qrReady || this.state.appReady) ?
     null : <Loader
       type={constants.loading.type}
       color={constants.loading.color}
@@ -90,6 +95,7 @@ class Network extends React.Component {
 
     return (
       <div className="network">
+        {this.loading()}
         {(OSName === 'android' || OSName === 'ios') ? 
           <iframe
             id="checkframe"
@@ -99,11 +105,7 @@ class Network extends React.Component {
             height="0"
             style={{display:'none'}}
           /> :
-          <div
-            className="qrbox"
-            ref={(ref) => {this.qrbox = ref}}>
-              {this.loading()}
-          </div>}
+          <div className="qrbox" ref={(ref) => {this.qrbox = ref}}/>}
       </div>
     )
   }

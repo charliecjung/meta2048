@@ -1,6 +1,19 @@
 import { qrcode } from 'qrcode.es'
 import constants from './constants'
 
+function addBtnTouchListener (buttons) {
+  if(buttons) {
+    let eventTouchend = window.navigator.msPointerEnabled ? 'MSPointerUp' : 'touchend'
+    buttons.forEach((button) => {
+      if(!button) return
+      button.addEventListener(eventTouchend, function(event) {
+        event.preventDefault()
+        event.target.click()
+      })
+    })
+  }
+}
+
 function checkOS () {
   let OSName = ""
   let uAgent = navigator.userAgent.toLocaleLowerCase()
@@ -27,6 +40,7 @@ async function showQR(qrbox, uri) {
 }
 
 export {
+  addBtnTouchListener,
   checkOS,
   makeSessionID,
   showQR

@@ -199,8 +199,8 @@ class App extends React.Component {
     //alert("topic: " + topic);
     if(topic === 'myScore' && !this.state.gameData.get('login')) return
     if(topic === 'rankBoard' && !this.state.gameData.get('login')) return
-    if(topic === 'register-scoreboard' && !this.state.gameData.get('login')) return
-    if(topic === 'register-rankboard' && !this.state.gameData.get('login')) return
+    if(topic === 'register-scoreboard' && !this.state.gameData.get('over')) return
+    if(topic === 'register-rankboard' && !this.state.gameData.get('over')) return
     this.setState({ selectTopic: topic })
   }
   loginCallback (result) {

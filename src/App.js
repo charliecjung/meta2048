@@ -11,6 +11,7 @@ import Network from './components/network'
 
 class App extends React.Component {
 
+
   constructor (props) {
     super(props)
 
@@ -37,6 +38,18 @@ class App extends React.Component {
       user: { name: '', score: '', highscore: '' }
     }
 
+     
+
+
+
+
+
+
+
+
+
+
+
     // related with game data
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
@@ -47,6 +60,11 @@ class App extends React.Component {
     this.startGame = this.startGame.bind(this)
     this.loginCallback = this.loginCallback.bind(this)
     this.onClickMenuBtn = this.onClickMenuBtn.bind(this)
+
+    //related with scoreboard
+    this.back = this.back.bind(this)
+
+    //related with rankings
   }
 
   componentDidMount () {
@@ -104,25 +122,66 @@ class App extends React.Component {
           callback={this.loginCallback}
         />
       case 'myScore':
-        return <MyBoard />
+            
+        return <MyBoard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn} 
+       /> 
       case 'rankBoard':
-        return <RankBoard />
+        return <RankBoard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn} 
+            />
+      //@title register-scoreboard: "Register Score button for Scoreboard
+      case 'register-scoreboard':
+        return <register-scoreboard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn} 
+            />
+       //@title register-rankboard: "Register Score button for Rankboard
+      case 'register-rankboard':
+        return <register-rankboard
+        back={this.back}
+        isFirstTime={isFirstTime}
+        isLogin = {isLogin}
+        resume={this.resume}
+        startGame={this.startGame}
+        onClickMenuBtn={this.onClickMenuBtn} 
+            />
+
       default:
         return <Menu
         isFirstTime={isFirstTime}
         isLogin = {isLogin}
+        //isLogin = "true"
         resume={this.resume}
         startGame={this.startGame}
         onClickMenuBtn={this.onClickMenuBtn} />
     }
   }
+  back () {
+      alert("back() is called");
+      alert("over: " + this.state.gameData.get('over'));
+  }
 
   resume () {
+
     const { gameData } = this.state
-    
     this.setState({
       gameData: gameData.set('terminated', false),
-      showMenu: false
+      showMenu: false,
     })
   }
 
@@ -132,14 +191,13 @@ class App extends React.Component {
       this.updateGameData,
       this.state.firstUse
     )
-    this.setState({ showMenu: false, firstUse: false })
+    this.setState({ showMenu: false, firstUse: false, login: false})
   }
 
   onClickMenuBtn (topic) {
     if(topic === 'myScore' && !this.state.gameData.get('login')) return
     this.setState({ selectTopic: topic })
   }
-
   loginCallback (result) {
     const { gameData } = this.state
 
@@ -148,6 +206,7 @@ class App extends React.Component {
       selectTopic: 'menu'
     })
   }
+
 
   render () {
     return (

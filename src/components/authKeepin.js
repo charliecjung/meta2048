@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Loader from 'react-loader-spinner'
+import ipfsClient from 'ipfs-http-client'
 
 import * as util from '../util'
 import constants from '../constants'
-import ipfs from '../ipfs'
 
-class Network extends React.Component {
+class AuthKeppin extends React.Component {
   static propTypes = {
     to: PropTypes.string,
     value: PropTypes.string,
@@ -25,6 +25,11 @@ class Network extends React.Component {
       appReady:false
     }
 
+    this.ipfs = ipfsClient({
+      host: constants.ipfs.host,
+      port: constants.ipfs.port,
+      protocol: constants.ipfs.protocol
+    })
     this.checkApplicationInstall = this.checkApplicationInstall.bind(this)
   }
 
@@ -71,7 +76,7 @@ class Network extends React.Component {
 
     // here is logic to make uri
 
-    ipfs.add([Buffer.from(baseRequestUri)], (err, ipfsHash) => {
+    this.ipfs.add([Buffer.from(baseRequestUri)], (err, ipfsHash) => {
       if(!err) console.log('SendTransaction IPFS hash:', ipfsHash[0].hash)
       
       let uri = err ? baseRequestUri : ipfsHash[0].hash
@@ -111,4 +116,4 @@ class Network extends React.Component {
   }
 }
 
-export default Network
+export default AuthKeppin

@@ -20,6 +20,11 @@ const constants = {
     height: "45",
     width: "45"
   },
+  ipfs: {
+    host: '15.164.64.229',
+    port: 5001,
+    protocol: 'http'
+  },
   gameData: {
     gameSize: 4,
     startTiles: 2

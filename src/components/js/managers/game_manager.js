@@ -2,7 +2,7 @@ import { Grid } from './grid'
 import { Tile } from './tile'
 
 class GameManager {
-  constructor(InputManager, Actuator, _getGameData, _updateGameData) {
+  constructor(InputManager, Actuator, _getGameData, _updateGameData, loadGameData) {
 
     this.getGameData = _getGameData
     this.updateGameData = _updateGameData
@@ -19,7 +19,7 @@ class GameManager {
 
     this.actuate = this.actuate.bind(this)
   
-    this.setup()
+    loadGameData ? this.load(loadGameData) : this.setup()
   }
 
   // Restart the game
@@ -43,8 +43,8 @@ class GameManager {
 
   // Set up the game
   async setup() {
-    this.grid = new Grid(this.size)
     this.updateGameData({
+      grid: new Grid(this.size),
       score: 0,
       over: false,
       won: false,
@@ -55,17 +55,15 @@ class GameManager {
     // Update the actuator
     this.actuate()
   }
-/*
-  load() {
-    let previousState = this.storageManager.getGameState()
 
-    if (previousState) {
-      this.grid = new Grid(previousState.grid.size, previousState.grid.cells) // Reload grid
+  load(loadGameData) {
+    if (loadGameData) {
       this.updateGameData({
-        score: previousState.score,
-        over: previousState.over,
-        won: previousState.won,
-        keepPlaying: previousState.keepPlaying
+        grid: new Grid(loadGameData.grid.size, loadGameData.grid.cells),
+        score: loadGameData.score,
+        over: loadGameData.over,
+        won: loadGameData.won,
+        keepPlaying: loadGameData.keepPlaying
       })
     } else {
       this.setup()
@@ -73,7 +71,7 @@ class GameManager {
 
     this.actuate()
   }
-*/
+
   // Set up the initial tiles to start the game with
   addStartTiles() {
     for (var i = 0; i < this.startTiles; i++) {
@@ -83,11 +81,11 @@ class GameManager {
 
   // Adds a tile in a random position
   addRandomTile() {
-    if (this.grid.cellsAvailable()) {
+    if (this.getGameData('grid').cellsAvailable()) {
       var value = Math.random() < 0.9 ? 2 : 4;
-      var tile = new Tile(this.grid.randomAvailableCell(), value)
+      var tile = new Tile(this.getGameData('grid').randomAvailableCell(), value)
   
-      this.grid.insertTile(tile)
+      this.getGameData('grid').insertTile(tile)
     }
   }
 
@@ -97,20 +95,12 @@ class GameManager {
     let bestScore = this.getGameData().bestScore
     if(score > bestScore) this.updateGameData({ bestScore: score })
     
-    this.actuator.actuate(this.grid, this.getGameData())
-  }
-
-  // Represent the current game as an object
-  serialize() {
-    return {
-      grid: this.grid.serialize(),
-      ...this.getGameData()
-    }
+    this.actuator.actuate(this.getGameData('grid'), this.getGameData())
   }
 
   // Save all tile positions and remove merger info
   prepareTiles() {
-    this.grid.eachCell(function (x, y, tile) {
+    this.getGameData('grid').eachCell(function (x, y, tile) {
       if (tile) {
         tile.mergedFrom = null
         tile.savePosition()
@@ -120,8 +110,8 @@ class GameManager {
 
   // Move a tile and its representation
   moveTile(tile, cell) {
-    this.grid.cells[tile.x][tile.y] = null
-    this.grid.cells[cell.x][cell.y] = tile
+    this.getGameData('grid').cells[tile.x][tile.y] = null
+    this.getGameData('grid').cells[cell.x][cell.y] = tile
     tile.updatePosition(cell)
   }
 
@@ -145,19 +135,19 @@ class GameManager {
     traversals.x.forEach(function (x) {
       traversals.y.forEach(function (y) {
         cell = { x: x, y: y }
-        tile = self.grid.cellContent(cell)
+        tile = self.getGameData().grid.cellContent(cell)
   
         if (tile) {
           var positions = self.findFarthestPosition(cell, vector)
-          var next = self.grid.cellContent(positions.next)
+          var next = self.getGameData().grid.cellContent(positions.next)
   
           // Only one merger per row traversal?
           if (next && next.value === tile.value && !next.mergedFrom) {
             var merged = new Tile(positions.next, tile.value * 2)
             merged.mergedFrom = [tile, next]
   
-            self.grid.insertTile(merged)
-            self.grid.removeTile(tile)
+            self.getGameData().grid.insertTile(merged)
+            self.getGameData().grid.removeTile(tile)
   
             // Converge the two tiles' positions
             tile.updatePosition(positions.next)
@@ -223,8 +213,8 @@ class GameManager {
     do {
       previous = cell
       cell = { x: previous.x + vector.x, y: previous.y + vector.y }
-    } while (this.grid.withinBounds(cell) &&
-      this.grid.cellAvailable(cell))
+    } while (this.getGameData('grid').withinBounds(cell) &&
+      this.getGameData('grid').cellAvailable(cell))
   
     return {
       farthest: previous,
@@ -233,7 +223,7 @@ class GameManager {
   }
 
   movesAvailable() {
-    return this.grid.cellsAvailable() || this.tileMatchesAvailable()
+    return this.getGameData('grid').cellsAvailable() || this.tileMatchesAvailable()
   }
 
   // Check for available matches between tiles (more expensive check)
@@ -244,14 +234,14 @@ class GameManager {
   
     for (var x = 0; x < this.size; x++) {
       for (var y = 0; y < this.size; y++) {
-        tile = this.grid.cellContent({ x: x, y: y })
+        tile = this.getGameData('grid').cellContent({ x: x, y: y })
   
         if (tile) {
           for (var direction = 0; direction < 4; direction++) {
             var vector = self.getVector(direction)
             var cell = { x: x + vector.x, y: y + vector.y }
   
-            var other = self.grid.cellContent(cell)
+            var other = self.getGameData().grid.cellContent(cell)
   
             if (other && other.value === tile.value) {
               return true // These two tiles can be merged

@@ -25,6 +25,9 @@ class Menu extends React.Component {
         <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.showRank()}>
           Rankging
         </span>
+        {!data.isFirstTime ? <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.saveGame()}>
+          Save Game
+        </span> : null}
         <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.loadGame()}>
           Load Game
         </span>

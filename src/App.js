@@ -5,12 +5,11 @@ import './App.css'
 import './components/style/main.css'
 import gameScript from './components/js'
 import constants from './constants'
+import Storage from './storage'
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
 import { Menu, RankBoard } from './components/menu'
 
 class App extends React.Component {
-
-
   constructor (props) {
     super(props)
 
@@ -18,6 +17,7 @@ class App extends React.Component {
       gameData: Map({
         gameSize: constants.gameData.gameSize,
         startTiles: constants.gameData.startTiles,
+        grid: null,
         score: 0,
         bestScore: 0,
         over: false,
@@ -29,6 +29,8 @@ class App extends React.Component {
       showMenu: true,
       selectTopic: 'menu'
     }
+
+    this.storage = new Storage()
     
     // related with game data
     this.getGameData = this.getGameData.bind(this)
@@ -40,6 +42,7 @@ class App extends React.Component {
     this.startGame = this.startGame.bind(this)
     this.showRank = this.showRank.bind(this)
     this.loadGame = this.loadGame.bind(this)
+    this.saveGame = this.saveGame.bind(this)
     this.backToMain = this.backToMain.bind(this)
   }
 
@@ -49,15 +52,17 @@ class App extends React.Component {
   }
 
   // related with game data
-  getGameData () {
-    return { ...this.state.gameData.toJS() }
+  getGameData (topic) {
+    if(topic === "grid") return this.state.gameData.get('grid')
+    else return { ...this.state.gameData.toJS() }
   }
 
   updateGameData (_state) {
     const { gameData } = this.state
 
     this.setState({
-      gameData: gameData.update('score', score => (typeof _state.score === 'number')  ? _state.score : score)
+      gameData: gameData.update('grid', grid => _state.grid ? _state.grid : grid)
+        .update('score', score => (typeof _state.score === 'number') ? _state.score : score)
         .update('bestScore', bestScore => _state.bestScore ? _state.bestScore : bestScore)
         .update('over', over => (typeof _state.over === 'boolean') ? _state.over : over)
         .update('won', won => (typeof _state.won === 'boolean') ? _state.won : won)
@@ -99,6 +104,7 @@ class App extends React.Component {
         resume={this.resume}
         startGame={this.startGame}
         showRank={this.showRank}
+        saveGame={this.saveGame}
         loadGame={this.loadGame} />
     }
   }
@@ -116,8 +122,8 @@ class App extends React.Component {
     })
   }
 
-  startGame () {
-    gameScript.application(this.getGameData, this.updateGameData)
+  startGame (loadGameData) {
+    gameScript.application(this.getGameData, this.updateGameData, loadGameData)
     this.setState({ showMenu: false, firstUse: false, login: false})
   }
 
@@ -126,7 +132,21 @@ class App extends React.Component {
   }
 
   loadGame () {
-    // Load game logic
+    let loadGameData = this.storage.getGameState()
+    this.startGame(loadGameData)
+  }
+
+  saveGame () {
+    const saveDate = {
+      grid: this.state.gameData.get('grid').serialize(),
+      score: this.state.gameData.get('score'),
+      over: this.state.gameData.get('over'),
+      won: this.state.gameData.get('won'),
+      keepPlaying: this.state.gameData.get('keepPlaying')
+    }
+
+    this.storage.setGameState(saveDate)
+    this.resume()
   }
 
   render () {

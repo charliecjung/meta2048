@@ -88,6 +88,4 @@ class RankBoard extends React.Component {
 export default RankBoard
 
 /* Comment
-2. Receive 10 data in JSON format as a property. Use props to convert json to object in constructor function.
-4. Make a separate function with 2 and 3 in above class.
 */

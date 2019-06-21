@@ -1,3 +1,12 @@
+.padding-table-columns td {
+    padding:0 20px 0 0;
+}
+.spacing-table-columns table {
+  border-spacing: 100px 0px;
+  padding:0 20px 0 0;
+}
+
+
 .menu {
     display: block;
     position: absolute;

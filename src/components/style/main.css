@@ -6,13 +6,6 @@ html, body {
   color: #776e65;
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   font-size: 18px; }
-.padding-table-columns td {
-    padding:0 20px 0 0;
-}
-.spacing-table-columns table {
-  border-spacing: 100px 0px;
-  padding:0 20px 0 0;
-}
 body {
   margin: 80px 0; }
 

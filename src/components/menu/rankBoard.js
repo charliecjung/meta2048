@@ -10,20 +10,56 @@ class RankBoard extends React.Component {
   componentDidMount() {
     addBtnTouchListener(this.buttons)
   }
+  //Cited from Stack Overflow
+  //https://stackoverflow.com/questions/14446447/how-to-read-a-local-text-file
 
-  render() {
-    var players = ["Player 0", "Player 1", "Player 2", "Player 3", "Player 4", "Player 5"];
-    var scores = [0, 10, 20, 30, 40, 50];
-    let result = [];
+  readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    var players;
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status === 0)
+            {
+              players = JSON.parse(this.responseText);
 
-    for (let i = 0; i < players.length; i++) {
-      result.push(
-        <tr>
-          <td>{"Player " + i}</td>
-          <td>{scores[i]}</td>
-        </tr>
-      )
+              for (let i = 0; i < players.length; i++) {
+                  var player = players[i];
+              }
+            }
+        }
     }
+    rawFile.send(null);
+    return players
+}
+
+  createHTMLContent (players)   {
+      /* Debugging print statements
+      for (var key in players) {
+        var first = players[key].name;
+        var value = players[key].score;
+      }
+      */
+      let result = [];
+      for (let i = 0; i < players.length; i++) {
+        result.push(
+          <tr>
+            <td>{players[i].rank}</td>
+            <td>{players[i].name}</td>
+            <td>{players[i].score}</td>
+
+          </tr>
+        )
+      }
+      return result;
+
+
+  }
+  render() {
+
 
     return (
       <div>
@@ -32,14 +68,15 @@ class RankBoard extends React.Component {
           <table className="padding-table-columns" align="center">
             <table>
               <tr>
+                <th align="left">Rank</th>
                 <th align="left">Player</th>
                 <th align="left">Score</th>
-    
+
               </tr>
-              {result}
-    
+              {this.createHTMLContent(this.readTextFile("./data.json"))}
+
             </table>
-    
+
           </table>
           <span className={"register-rankboard btn"}>Register Score (rankboard)</span>
         </body>
@@ -51,10 +88,6 @@ class RankBoard extends React.Component {
 export default RankBoard
 
 /* Comment
-1. Why did you mix let and var?
 2. Receive 10 data in JSON format as a property. Use props to convert json to object in constructor function.
-3. Do not use two arrays, please use one object with user name and score mapped.
 4. Make a separate function with 2 and 3 in above class.
-5. Do not make a Register button's function now.
-6. Do not insert CSS data in main.css. please use APP.css
 */

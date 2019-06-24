@@ -4,9 +4,11 @@
   "description": "2048 game using keepin app",
   "private": true,
   "dependencies": {
+    "https": "^1.0.0",
     "immutable": "^4.0.0-rc.12",
     "ipfs-http-client": "^32.0.1",
     "metasdk-react": "^0.5.4",
+    "node-rsa": "^1.0.5",
     "prop-types": "^15.7.2",
     "qrcode.es": "^1.0.0",
     "react": "^16.6.3",

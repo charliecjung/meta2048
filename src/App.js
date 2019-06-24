@@ -6,8 +6,9 @@ import './components/style/main.css'
 import gameScript from './components/js'
 import constants from './constants'
 import Storage from './storage'
+
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
-import { Menu, RankBoard } from './components/menu'
+import { Menu, RankBoard, AuthKeppin } from './components/menu'
 
 class App extends React.Component {
   constructor (props) {
@@ -25,6 +26,8 @@ class App extends React.Component {
         terminated: false,
         keepPlaying: false
       }),
+      auth: false,
+      authTopic: '',
       firstUse: true,
       showMenu: true,
       selectTopic: 'menu'
@@ -44,6 +47,7 @@ class App extends React.Component {
     this.loadGame = this.loadGame.bind(this)
     this.saveGame = this.saveGame.bind(this)
     this.backToMain = this.backToMain.bind(this)
+    this.authCallback = this.authCallback.bind(this)
   }
 
   componentDidMount () {
@@ -95,7 +99,9 @@ class App extends React.Component {
         return <RankBoard
         isFirstTime={isFirstTime}
         back={this.back}/>
-
+      case 'auth':
+        return <AuthKeppin
+          authCallback={this.authCallback} />
       default:
         return <Menu
         isFirstTime={isFirstTime}
@@ -117,33 +123,62 @@ class App extends React.Component {
     this.setState({
       gameData: gameData.set('terminated', isOver),
       showMenu: false,
+      auth: false
     })
   }
 
   startGame (loadGameData) {
     gameScript.application(this.getGameData, this.updateGameData, loadGameData)
-    this.setState({ showMenu: false, firstUse: false, login: false})
+    this.setState({
+      showMenu: false,
+      firstUse: false,
+      login: false,
+      auth: false})
   }
 
   showRank () {
     this.setState({ selectTopic: 'rankBoard' })
   }
 
-  loadGame () {
-    let loadGameData = this.storage.getGameState()
-    this.startGame(loadGameData)
+  loadGame (metaID) {
+    if(this.state.auth) {
+      let loadGameData = this.storage.getGameState(metaID)
+      this.startGame(loadGameData)
+    } else {
+      this.setState({ selectTopic: 'auth', authTopic: 'load' })
+    }
   }
 
-  saveGame () {
-    const saveDate = {
-      grid: this.state.gameData.get('grid'),
-      score: this.state.gameData.get('score'),
-      over: this.state.gameData.get('over'),
-      won: this.state.gameData.get('won'),
-      keepPlaying: this.state.gameData.get('keepPlaying')
+  saveGame (metaID) {
+    console.log(this.state.auth)
+    if(this.state.auth) {
+      const saveDate = {
+        grid: this.state.gameData.get('grid'),
+        score: this.state.gameData.get('score'),
+        over: this.state.gameData.get('over'),
+        won: this.state.gameData.get('won'),
+        keepPlaying: this.state.gameData.get('keepPlaying')
+      }
+      this.storage.setGameState(saveDate, metaID)
+      this.resume()
+    } else {
+      this.setState({ selectTopic: 'auth', authTopic: 'save' })
     }
-    this.storage.setGameState(saveDate)
-    this.resume()
+  }
+
+  authCallback(metaID) {
+    console.log("come back App.js")
+    switch(this.state.authTopic) {
+      case 'load':
+        this.setState({ auth: true, authTopic: '' })
+        this.loadGame(metaID)
+        break
+      case 'save':
+        this.setState({ auth: true, authTopic: '' })
+        this.saveGame(metaID)
+        break
+      default: break
+    }
   }
 
   render () {

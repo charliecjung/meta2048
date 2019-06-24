@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Loader from 'react-loader-spinner'
-import ipfsClient from 'ipfs-http-client'
+//import ipfsClient from 'ipfs-http-client'
+import https from 'https'
 
-import * as util from '../util'
-import constants from '../constants'
+import * as util from '../../util'
+import constants from '../../constants'
 
 class AuthKeppin extends React.Component {
   static propTypes = {
@@ -24,24 +25,31 @@ class AuthKeppin extends React.Component {
       qrReady: false,
       appReady:false
     }
-
+    /*
     this.ipfs = ipfsClient({
       host: constants.ipfs.host,
       port: constants.ipfs.port,
       protocol: constants.ipfs.protocol
     })
-    this.checkApplicationInstall = this.checkApplicationInstall.bind(this)
+    */
+    this.callbackUrl = util.makeCallbackUrl(this.state.session)
+    this.uri = util.makeUri(this.state.session, true, this.callbackUrl)
+    console.log(this.uri)
   }
 
   componentDidMount () {
     let OSName = this.state.OSName
     if(OSName === "android" || OSName === "ios") {
       let visitedAt = (new Date()).getTime()
-      document.checkframe.location = constants.testUri
+      document.checkframe.location = this.uri
       setTimeout(() => this.checkApplicationInstall(visitedAt), 1500)
     } else {
       this.makeQR()
     }
+  }
+
+  componentWillUnmount () {
+    if(this.interval) clearInterval(this.interval)
   }
 
   checkApplicationInstall (visitedAt) {
@@ -68,39 +76,56 @@ class AuthKeppin extends React.Component {
       }
     }
 
-    this.setState({ appReady: true })
+    this.setState({ appReady: true }, () => this.waitResponse())
   }
 
   makeQR () {
-    let baseRequestUri = constants.testUri
-
-    // here is logic to make uri
-
-    this.ipfs.add([Buffer.from(baseRequestUri)], (err, ipfsHash) => {
+    util.showQR(this.qrbox, this.uri).then((result) => this.setState({ qrReady: result }, () => this.makeInterval()))
+    /*
+    this.ipfs.add([Buffer.from(this.uri)], (err, ipfsHash) => {
       if(!err) console.log('SendTransaction IPFS hash:', ipfsHash[0].hash)
       
-      let uri = err ? baseRequestUri : ipfsHash[0].hash
-      util.showQR(this.qrbox, uri).then((result) => this.setState({ qrReady: result }))
+      let uri = err ? this.uri : ipfsHash[0].hash
+      util.showQR(this.qrbox, uri).then((result) => this.setState({ qrReady: result }, () => this.makeInterval()))
     })
+    */
   }
 
-  loading () {
-    let loading = (this.state.qrReady || this.state.appReady) ?
-    null : <Loader
-      type={constants.loading.type}
-      color={constants.loading.color}
-      height={constants.loading.height}
-      width={constants.loading.width}
-    />
-    return loading
+  makeInterval () {
+    this.interval = setInterval(() => this.checkResponse(), 1000)
+  }
+
+  checkResponse () {
+    https.request({
+      host: constants.cacheServer.host,
+      path: '/' + constants.cacheServer.stage + '?key=' + this.state.session
+    }, (res) => {
+      let data = ''
+      res.on('data', (chunk) => { data += chunk })
+      res.on('end', () => {
+        if(data !== '') {
+          clearInterval(this.interval)
+          let result = JSON.parse(data)
+          console.log("meta id is: ", result.meta_id)
+          if(this.props.authCallback) this.props.authCallback(result.meta_id)
+        }
+      })
+    }).on('error', (err) => {
+      console.log('error: ', err)
+    }).end()
   }
 
   render () {
     const OSName = this.state.OSName
-
+    const qrBoxDisplay = this.state.qrReady ? 'block' : 'none'
     return (
       <div className="network">
-        {this.loading()}
+        {(this.state.qrReady || this.state.appReady) ?
+          null : <Loader
+            type={constants.loading.type}
+            color={constants.loading.color}
+            height={constants.loading.height}
+            width={constants.loading.width} />}
         {(OSName === 'android' || OSName === 'ios') ? 
           <iframe
             id="checkframe"
@@ -110,7 +135,10 @@ class AuthKeppin extends React.Component {
             height="0"
             style={{display:'none'}}
           /> :
-          <div className="qrbox" ref={(ref) => {this.qrbox = ref}}/>}
+          <div
+            className="qrbox"
+            ref={(ref) => {this.qrbox = ref}}
+            style={{display: qrBoxDisplay}}/>}
       </div>
     )
   }

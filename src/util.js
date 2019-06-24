@@ -32,6 +32,23 @@ function makeSessionID() {
   return text
 }
 
+function makeCallbackUrl(key) {
+  return 'https%3A%2F%2F' + constants.cacheServer.host + '/' + constants.cacheServer.stage + '?key=' + key
+}
+
+function makeUri(nonce, auto_reg, callback) {
+  let uri = constants.scheme
+
+  uri += '?service_id=' + constants.service_id
+  if(nonce) uri += '&nonce=' + nonce
+  else uri += '&nonce=' + makeSessionID()
+  
+  if(typeof auto_reg === 'boolean') uri += '&auto_reg=' + auto_reg
+  if(callback) uri += '&callback=' + callback
+
+  return uri
+}
+
 async function showQR(qrbox, uri) {
   if(!qrbox) return false
   const qrCode = new qrcode(qrbox)
@@ -43,5 +60,7 @@ export {
   addBtnTouchListener,
   checkOS,
   makeSessionID,
+  makeCallbackUrl,
+  makeUri,
   showQR
 }

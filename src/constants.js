@@ -1,7 +1,12 @@
 import { modes, ecLevel } from 'qrcode.es'
 
 const constants = {
-  testUri: 'metadium-keepin://authentication?service_id=a0ad73f907ab3ce870db6671afb4a417a3315f03e5eca6a2b44cb1fac08d5d60&nonce=53418903428&auto_reg=true',
+  scheme: 'metadium-keepin://authentication',
+  service_id: 'com.metadium.game.g2048',
+  cacheServer: {
+    host: 'cache.metadium.com',
+    stage: 'dev'
+  },
   googleAppStore: "https://play.google.com/store/apps/details?id=com.coinplug.metadium&hl=ko",
   apppleAppStroe: "https://play.google.com/store/apps/details?id=com.coinplug.metadium&hl=ko",
   qrOptions: {

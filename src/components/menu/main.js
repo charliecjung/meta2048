@@ -23,7 +23,7 @@ class Menu extends React.Component {
           New Game
         </span>
         <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.showRank()}>
-          Rankging
+          Ranking
         </span>
         {!data.isFirstTime ? <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.saveGame()}>
           Save Game

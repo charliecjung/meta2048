@@ -52,14 +52,12 @@ class App extends React.Component {
   }
 
   // related with game data
-  getGameData (topic) {
-    if(topic === "grid") return this.state.gameData.get('grid')
-    else return { ...this.state.gameData.toJS() }
+  getGameData () {
+    return { ...this.state.gameData.toJS() }
   }
 
   updateGameData (_state) {
     const { gameData } = this.state
-
     this.setState({
       gameData: gameData.update('grid', grid => _state.grid ? _state.grid : grid)
         .update('score', score => (typeof _state.score === 'number') ? _state.score : score)
@@ -138,13 +136,12 @@ class App extends React.Component {
 
   saveGame () {
     const saveDate = {
-      grid: this.state.gameData.get('grid').serialize(),
+      grid: this.state.gameData.get('grid'),
       score: this.state.gameData.get('score'),
       over: this.state.gameData.get('over'),
       won: this.state.gameData.get('won'),
       keepPlaying: this.state.gameData.get('keepPlaying')
     }
-
     this.storage.setGameState(saveDate)
     this.resume()
   }

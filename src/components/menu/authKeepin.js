@@ -59,10 +59,11 @@ class AuthKeppin extends React.Component {
       try {
         // check application 
         let check = document.checkframe.document.body.innerHTML
-        if(!check) {
-          this.setState({ OSName: "notMobile"}, this.makeQR())
+        
+        /*if(!check) {
+          this.setState({ OSName: "notMobile"}, this.makeQR)
           return
-        }
+        }*/
       } catch (err) {
         if(window.confirm("Keepin is not installed")) {
           window.location.href = constants.googleAppStore
@@ -76,7 +77,7 @@ class AuthKeppin extends React.Component {
       }
     }
 
-    this.setState({ appReady: true }, () => this.waitResponse())
+    this.setState({ appReady: true }, () => this.makeInterval())
   }
 
   makeQR () {

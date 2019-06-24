@@ -1,3 +1,5 @@
+
+
 class Storage {
   constructor() {
     this.storage = window.localStorage
@@ -11,6 +13,10 @@ class Storage {
 
   setGameState(gameState, metaID) {
     this.storage.setItem(metaID, JSON.stringify(gameState))
+  }
+
+  getRankData(start, end) {
+    
   }
 }
 

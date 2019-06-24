@@ -34,7 +34,7 @@ class App extends React.Component {
     }
 
     this.storage = new Storage()
-    
+
     // related with game data
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
@@ -76,7 +76,7 @@ class App extends React.Component {
     const { gameData } = this.state
     const terminated = this.state.showMenu || this.state.gameData.get('over') || (this.state.gameData.get('won') && !this.state.gameData.get('keepPlaying'))
 
-    if( gameData.get('terminated') !== terminated) this.setState({ gameData: gameData.set('terminated', terminated) })
+    if (gameData.get('terminated') !== terminated) this.setState({ gameData: gameData.set('terminated', terminated) })
   }
 
   // related with menu
@@ -94,27 +94,28 @@ class App extends React.Component {
     let topic = this.state.selectTopic
     let isFirstTime = this.state.firstUse
 
-    switch(topic) {
+    switch (topic) {
       case 'rankBoard':
         return <RankBoard
-        isFirstTime={isFirstTime}
-        back={this.back}/>
+          isFirstTime={isFirstTime}
+          users={this.storage.getRankData(1, 8)}
+          back={this.back} />
       case 'auth':
         return <AuthKeppin
           authCallback={this.authCallback} />
       default:
         return <Menu
-        isFirstTime={isFirstTime}
-        resume={this.resume}
-        startGame={this.startGame}
-        showRank={this.showRank}
-        saveGame={this.saveGame}
-        loadGame={this.loadGame} />
+          isFirstTime={isFirstTime}
+          resume={this.resume}
+          startGame={this.startGame}
+          showRank={this.showRank}
+          saveGame={this.saveGame}
+          loadGame={this.loadGame} />
     }
   }
 
   backToMain () {
-    this.setState({ selectTopic: 'main'})
+    this.setState({ selectTopic: 'main' })
   }
 
   resume () {
@@ -133,7 +134,7 @@ class App extends React.Component {
       showMenu: false,
       firstUse: false,
       login: false,
-      auth: false})
+      auth: false })
   }
 
   showRank () {
@@ -141,7 +142,7 @@ class App extends React.Component {
   }
 
   loadGame (metaID) {
-    if(this.state.auth) {
+    if (this.state.auth) {
       let loadGameData = this.storage.getGameState(metaID)
       this.startGame(loadGameData)
     } else {
@@ -151,7 +152,7 @@ class App extends React.Component {
 
   saveGame (metaID) {
     console.log(this.state.auth)
-    if(this.state.auth) {
+    if (this.state.auth) {
       const saveDate = {
         grid: this.state.gameData.get('grid'),
         score: this.state.gameData.get('score'),
@@ -166,9 +167,9 @@ class App extends React.Component {
     }
   }
 
-  authCallback(metaID) {
-    console.log("come back App.js")
-    switch(this.state.authTopic) {
+  authCallback (metaID) {
+    console.log('come back App.js')
+    switch (this.state.authTopic) {
       case 'load':
         this.setState({ auth: true, authTopic: '' })
         this.loadGame(metaID)
@@ -183,17 +184,17 @@ class App extends React.Component {
 
   render () {
     return (
-      <div className="container">
-        <Heading/>
-        <Above showMenu={this.showMenu}/>
-        <div className="game-container">
-          {this.state.showMenu ? <div className="menu">{this.getMenuScreen()}</div> : null}
-          <Message/>
-          <Grid/>
-          <div className="tile-container"/>
+      <div className='container'>
+        <Heading />
+        <Above showMenu={this.showMenu} />
+        <div className='game-container'>
+          {this.state.showMenu ? <div className='menu'>{this.getMenuScreen()}</div> : null}
+          <Message />
+          <Grid />
+          <div className='tile-container' />
         </div>
-        <Explanation/>
-      <hr />
+        <Explanation />
+        <hr />
       </div>
     )
   }

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Loader from 'react-loader-spinner'
-//import ipfsClient from 'ipfs-http-client'
+// import ipfsClient from 'ipfs-http-client'
 import https from 'https'
 
 import * as util from '../../util'
@@ -23,7 +23,7 @@ class AuthKeppin extends React.Component {
       OSName: util.checkOS(),
       session: util.makeSessionID(),
       qrReady: false,
-      appReady:false
+      appReady: false
     }
     /*
     this.ipfs = ipfsClient({
@@ -39,7 +39,7 @@ class AuthKeppin extends React.Component {
 
   componentDidMount () {
     let OSName = this.state.OSName
-    if(OSName === "android" || OSName === "ios") {
+    if (OSName === 'android' || OSName === 'ios') {
       let visitedAt = (new Date()).getTime()
       document.checkframe.location = this.uri
       setTimeout(() => this.checkApplicationInstall(visitedAt), 1500)
@@ -49,30 +49,30 @@ class AuthKeppin extends React.Component {
   }
 
   componentWillUnmount () {
-    if(this.interval) clearInterval(this.interval)
+    if (this.interval) clearInterval(this.interval)
   }
 
   checkApplicationInstall (visitedAt) {
     let OSName = this.state.OSName
 
-    if(OSName === "android") {
+    if (OSName === 'android') {
       try {
-        // check application 
+        // check application
         let check = document.checkframe.document.body.innerHTML
-        
-        /*if(!check) {
-          this.setState({ OSName: "notMobile"}, this.makeQR)
+
+        if (!check) {
+          this.setState({ OSName: 'notMobile' }, this.makeQR)
           return
-        }*/
+        }
       } catch (err) {
-        if(window.confirm("Keepin is not installed")) {
+        if (window.confirm('Keepin is not installed')) {
           window.location.href = constants.googleAppStore
         }
       }
     }
 
-    if(OSName === "ios" && (new Date()).getTime() - visitedAt < 2000) {
-      if(window.confirm("Keepin is not installed")) {
+    if (OSName === 'ios' && (new Date()).getTime() - visitedAt < 2000) {
+      if (window.confirm('Keepin is not installed')) {
         window.location.href = constants.apppleAppStroe
       }
     }
@@ -85,7 +85,7 @@ class AuthKeppin extends React.Component {
     /*
     this.ipfs.add([Buffer.from(this.uri)], (err, ipfsHash) => {
       if(!err) console.log('SendTransaction IPFS hash:', ipfsHash[0].hash)
-      
+
       let uri = err ? this.uri : ipfsHash[0].hash
       util.showQR(this.qrbox, uri).then((result) => this.setState({ qrReady: result }, () => this.makeInterval()))
     })
@@ -104,11 +104,11 @@ class AuthKeppin extends React.Component {
       let data = ''
       res.on('data', (chunk) => { data += chunk })
       res.on('end', () => {
-        if(data !== '') {
+        if (data !== '') {
           clearInterval(this.interval)
           let result = JSON.parse(data)
-          console.log("meta id is: ", result.meta_id)
-          if(this.props.authCallback) this.props.authCallback(result.meta_id)
+          console.log('meta id is: ', result.meta_id)
+          if (this.props.authCallback) this.props.authCallback(result.meta_id)
         }
       })
     }).on('error', (err) => {
@@ -120,26 +120,26 @@ class AuthKeppin extends React.Component {
     const OSName = this.state.OSName
     const qrBoxDisplay = this.state.qrReady ? 'block' : 'none'
     return (
-      <div className="network">
-        {(this.state.qrReady || this.state.appReady) ?
-          null : <Loader
+      <div className='network'>
+        {(this.state.qrReady || this.state.appReady)
+          ? null : <Loader
             type={constants.loading.type}
             color={constants.loading.color}
             height={constants.loading.height}
             width={constants.loading.width} />}
-        {(OSName === 'android' || OSName === 'ios') ? 
-          <iframe
-            id="checkframe"
-            name="checkframe"
-            title="checkframe"
-            width="0" 
-            height="0"
-            style={{display:'none'}}
-          /> :
-          <div
-            className="qrbox"
-            ref={(ref) => {this.qrbox = ref}}
-            style={{display: qrBoxDisplay}}/>}
+        {(OSName === 'android' || OSName === 'ios')
+          ? <iframe
+            id='checkframe'
+            name='checkframe'
+            title='checkframe'
+            width='0'
+            height='0'
+            style={{ display: 'none' }}
+          />
+          : <div
+            className='qrbox'
+            ref={(ref) => { this.qrbox = ref }}
+            style={{ display: qrBoxDisplay }} />}
       </div>
     )
   }

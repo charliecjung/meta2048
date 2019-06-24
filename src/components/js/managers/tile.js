@@ -1,5 +1,5 @@
 class Tile {
-  constructor(position, value) {
+  constructor (position, value) {
     this.x = position.x
     this.y = position.y
     this.value = value || 2
@@ -8,15 +8,15 @@ class Tile {
     this.mergedFrom = null // Tracks tiles that merged together
   }
 
-  savePosition() {
+  savePosition () {
     this.previousPosition = { x: this.x, y: this.y }
   }
-  
-  updatePosition(position) {
+
+  updatePosition (position) {
     this.x = position.x
     this.y = position.y
   }
-  
+
   serialize () {
     return {
       position: {

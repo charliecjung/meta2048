@@ -7,8 +7,8 @@ const constants = {
     host: 'cache.metadium.com',
     stage: 'dev'
   },
-  googleAppStore: "https://play.google.com/store/apps/details?id=com.coinplug.metadium&hl=ko",
-  apppleAppStroe: "https://play.google.com/store/apps/details?id=com.coinplug.metadium&hl=ko",
+  googleAppStore: 'https://play.google.com/store/apps/details?id=com.coinplug.metadium&hl=ko',
+  apppleAppStroe: 'https://play.google.com/store/apps/details?id=com.coinplug.metadium&hl=ko',
   qrOptions: {
     size: 300,
     ecLevel: ecLevel.LOW,
@@ -20,10 +20,10 @@ const constants = {
     mSize: 0.15
   },
   loading: {
-    type: "Grid",
-    color: "#8f7a66",
-    height: "45",
-    width: "45"
+    type: 'Grid',
+    color: '#8f7a66',
+    height: '45',
+    width: '45'
   },
   ipfs: {
     host: '15.164.64.229',

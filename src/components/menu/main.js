@@ -11,24 +11,24 @@ class Menu extends React.Component {
     addBtnTouchListener(this.buttons)
   }
 
-  render() {
+  render () {
     let data = this.props
     return (
       <div>
         <p>Menu</p>
-        {!data.isFirstTime ? <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.resume()}>
+        {!data.isFirstTime ? <span className='btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.resume()}>
           Resume
         </span> : null}
-        <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.startGame()}>
+        <span className='btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.startGame()}>
           New Game
         </span>
-        <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.showRank()}>
+        <span className='btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.showRank()}>
           Ranking
         </span>
-        {!data.isFirstTime ? <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.saveGame()}>
+        {!data.isFirstTime ? <span className='btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.saveGame()}>
           Save Game
         </span> : null}
-        <span className="btn" ref={ref => {this.buttons.push(ref)}} onClick={() => data.loadGame()}>
+        <span className='btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.loadGame()}>
           Load Game
         </span>
       </div>

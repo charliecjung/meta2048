@@ -3,7 +3,7 @@ import { KeyboardInputManager } from './keyboard_input_manager'
 import { HTMLActuator } from './html_actuator'
 
 export {
-    GameManager,
-    KeyboardInputManager,
-    HTMLActuator
+  GameManager,
+  KeyboardInputManager,
+  HTMLActuator
 }

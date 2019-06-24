@@ -3,7 +3,7 @@ import RankBoard from './rankBoard'
 import AuthKeppin from './authKeepin'
 
 export {
-    Menu,
-    RankBoard,
-    AuthKeppin
+  Menu,
+  RankBoard,
+  AuthKeppin
 }

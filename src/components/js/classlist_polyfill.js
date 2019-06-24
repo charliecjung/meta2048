@@ -1,11 +1,10 @@
 const classlist_polyfill = () => {
-  
-  if (typeof window.Element === "undefined" || "classList" in document.documentElement) {
+  if (typeof window.Element === 'undefined' || 'classList' in document.documentElement) {
     return
   }
 
   class DOMTokenList extends Array {
-    constructor(_el) {
+    constructor (_el) {
       super()
       this.el = _el
       let classes = _el.className.replace(/^\s+|\s+$/g, '').split(/\s+/)
@@ -14,21 +13,21 @@ const classlist_polyfill = () => {
       }
     }
 
-    add(token) {
+    add (token) {
       if (this.contains(token)) return
       super.push.call(this, token)
       this.el.className = this.toString()
     }
 
-    contains(token) {
+    contains (token) {
       return this.el.className.indexOf(token) !== -1
     }
 
-    item(index) {
+    item (index) {
       return this[index] || null
     }
 
-    remove(token) {
+    remove (token) {
       if (!this.contains(token)) return
       for (var i = 0; i < this.length; i++) {
         if (this[i] === token) break
@@ -37,23 +36,23 @@ const classlist_polyfill = () => {
       this.el.className = this.toString()
     }
 
-    toString() {
+    toString () {
       return super.join.call(this, ' ')
     }
 
-    toggle(token) {
+    toggle (token) {
       if (!this.contains(token)) {
         this.add(token)
       } else {
         this.remove(token)
       }
-  
-     return this.contains(token)
+
+      return this.contains(token)
     }
   }
   window.DOMTokenList = DOMTokenList
 
-  function defineElementGetter(obj, prop, getter) {
+  function defineElementGetter (obj, prop, getter) {
     if (Object.defineProperty) {
       Object.defineProperty(obj, prop, {
         get: getter
@@ -65,7 +64,7 @@ const classlist_polyfill = () => {
 
   defineElementGetter(HTMLElement.prototype, 'classList', function () {
     return new DOMTokenList(this)
-  }) 
+  })
 }
 
 export { classlist_polyfill }

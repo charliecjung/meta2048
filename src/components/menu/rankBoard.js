@@ -27,7 +27,7 @@ class RankBoard extends React.Component {
               players = JSON.parse(this.responseText);
 
               for (let i = 0; i < players.length; i++) {
-                  var player = players[i];
+                  //var player = players[i];
               }
             }
         }
@@ -36,7 +36,7 @@ class RankBoard extends React.Component {
     return players
 }
 
-  createHTMLContent (players)   {
+  createHTMLContent (players) {
       /* Debugging print statements
       for (var key in players) {
         var first = players[key].name;

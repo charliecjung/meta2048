@@ -8,7 +8,7 @@ class RankBoard extends React.Component {
   }
   //Default Props for RankBoard
   //Not entirely sure why I need a ;(semicolon) instead of a period in order to compile.
-  RankBoard;defaultProps =
+  static defaultProps =
     {
       players: [{
         name: "Alpha",
@@ -19,7 +19,7 @@ class RankBoard extends React.Component {
         name: "Bravo",
         rank: 2,
         score: 100
-      
+
       },
       {
         name: "Charlie",
@@ -46,12 +46,12 @@ class RankBoard extends React.Component {
         rank: 7,
         score: 800
       },
-    
+
       {
         name: "Ish",
         rank: 8,
         score: 1000
-      },]
+      }]
   }
 
   componentDidMount() {
@@ -60,12 +60,12 @@ class RankBoard extends React.Component {
 
   createHTMLContent () {
       let result = [];
-      for (let i = 0; i < this.defaultProps.players.length; i++) {
+      for (let i = 0; i < RankBoard.defaultProps.players.length; i++) {
         result.push(
           <tr>
-            <td> {this.defaultProps.players[i].rank}</td>
-            <td> {this.defaultProps.players[i].name}</td>
-            <td> {this.defaultProps.players[i].score}</td>
+            <td> {RankBoard.defaultProps.players[i].rank}</td>
+            <td> {RankBoard.defaultProps.players[i].name}</td>
+            <td> {RankBoard.defaultProps.players[i].score}</td>
           </tr>
         )
       }
@@ -77,12 +77,12 @@ class RankBoard extends React.Component {
     return (
       <div>
         <body id='test'>
-       
+
           <h2>Ranking</h2>
           <table className="padding-table-columns" align="center">
             <table>
               <tr>
-                
+
                 <th align="left">Rank</th>
                 <th align="left">Player</th>
                 <th align="left">Score</th>

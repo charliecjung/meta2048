@@ -60,12 +60,12 @@ class RankBoard extends React.Component {
 
   createHTMLContent () {
       let result = [];
-      for (let i = 0; i < RankBoard.defaultProps.players.length; i++) {
+      for (let i = 0; i < this.props.players.length; i++) {
         result.push(
           <tr>
-            <td> {RankBoard.defaultProps.players[i].rank}</td>
-            <td> {RankBoard.defaultProps.players[i].name}</td>
-            <td> {RankBoard.defaultProps.players[i].score}</td>
+            <td> {this.props.players[i].rank}</td>
+            <td> {this.props.players[i].name}</td>
+            <td> {this.props.players[i].score}</td>
           </tr>
         )
       }
@@ -93,10 +93,13 @@ class RankBoard extends React.Component {
             </table>
 
           </table>
-          <span className={"register-rankboard btn"}>Register Score (rankboard)</span>
+          <span className="register-rankboard btn" ref={ref => {this.buttons.push(ref)}} onClick={() => this.registerScore()}>Register Score</span>
         </body>
       </div>
     )
+  }
+  registerScore() {
+    
   }
 }
 

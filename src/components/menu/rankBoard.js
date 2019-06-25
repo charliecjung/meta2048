@@ -20,11 +20,12 @@ class RankBoard extends React.Component {
       </tr>
     ))
   }
-  
-  
+
+  registerScore () {
+
+  }
 
   render () {
-    let data = this.props
     return (
       <div>
         <h2>Ranking</h2>
@@ -38,7 +39,7 @@ class RankBoard extends React.Component {
           </thead>
           <tbody>{this.getRankTable()}</tbody>
         </table>
-        <span className='registerRankboard btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.registerScore()}>Register Score</span>
+        <span className='register-rankboard btn' ref={ref => { this.buttons.push(ref) }} onClick={() => this.registerScore()}>Register Score</span>
       </div>
     )
   }

@@ -8,16 +8,18 @@ import * as util from '../../util'
 import constants from '../../constants'
 import Storage from '../../storage.js'
 
+
 class AuthKeppin extends React.Component {
   static propTypes = {
     to: PropTypes.string,
     value: PropTypes.string,
     data: PropTypes.string,
     topic: PropTypes.string,
-    callback: PropTypes.func,
-    debug: true
+    callback: PropTypes.func
   }
-
+ 
+  
+  
   constructor (props) {
     super(props)
 
@@ -37,14 +39,26 @@ class AuthKeppin extends React.Component {
     this.callbackUrl = util.makeCallbackUrl(this.state.session)
     this.uri = util.makeUri(this.state.session, true, this.callbackUrl)
     console.log(this.uri)
-  }
 
-  componentDidMount () {
-     if (this.props.debug) {
-       alert("metaID: " + this.props.metaID)
-       this.props.authCallback(this.props.metaID)
-       return
-     }
+    //this.authCallback = this.authCallback.bind(this)
+    //this.debug = this.debug.bind(this)
+
+    
+  }
+  
+
+  componentDidMount (props) {
+     this.storage = new Storage();
+     alert("Component did Mount")
+     var prop_properties = Object.keys(this.props)
+     alert("prop_properties: " + prop_properties)
+     alert("storage props: " + Object.keys(this.storage))
+     alert("this.storage.metaID: " + this.storage.metaID)
+     
+
+       //this.props.authCallback(this.props.metaID)
+       //return
+     
 
     let OSName = this.state.OSName
     if (OSName === 'android' || OSName === 'ios') {

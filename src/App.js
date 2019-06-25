@@ -14,7 +14,7 @@ import  RegisterScore  from './components/menu/registerScore.js'
 class App extends React.Component {
   constructor (props) {
     super(props)
-
+    
     this.state = {
       gameData: Map({
         gameSize: constants.gameData.gameSize,
@@ -31,7 +31,8 @@ class App extends React.Component {
       authTopic: '',
       firstUse: true,
       showMenu: true,
-      selectTopic: 'menu'
+      selectTopic: 'menu',
+     
     }
 
     this.storage = new Storage()
@@ -53,8 +54,9 @@ class App extends React.Component {
     //registerScore's displayRanking method
     this.registerScore = this.registerScore.bind(this)
     this.displayRanking = this.displayRanking.bind(this)
+ 
 
-    //this.debug = this.debug.bind(this)
+
   }
 
   componentDidMount () {
@@ -69,6 +71,7 @@ class App extends React.Component {
 
   displayRanking () {
   alert("displayRanking() called")
+  this.setState({ selectTopic: 'auth'})
 
   }
   registerScore () {
@@ -129,7 +132,7 @@ class App extends React.Component {
       case 'auth':
         return <AuthKeppin
           authCallback={this.authCallback} 
-          debug={this.debug} />
+           />
       default:
         return <Menu
           isFirstTime={isFirstTime}

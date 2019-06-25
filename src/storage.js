@@ -1,5 +1,5 @@
 class Storage {
-  constructor () {
+  constructor (props) {
     this.storage = window.localStorage
     this.dumyUsers = [
       { name: 'Alpha', rank: 1, score: 90 },
@@ -11,8 +11,11 @@ class Storage {
       { name: 'Haitham', rank: 7, score: 800 },
       { name: 'Ish', rank: 8, score: 1000 }
     ]
+    
     this.metaID = "uwLYwgkxKwRHdRpQD9gEy6SA"
-  }
+    
+
+    }
 
   // Game state getters/setters and clearing
   getGameState (metaID) {

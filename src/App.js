@@ -9,6 +9,7 @@ import Storage from './storage'
 
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
 import { Menu, RankBoard, AuthKeppin } from './components/menu'
+import  RegisterScore  from './components/menu/registerScore.js'
 
 class App extends React.Component {
   constructor (props) {
@@ -48,6 +49,12 @@ class App extends React.Component {
     this.saveGame = this.saveGame.bind(this)
     this.backToMain = this.backToMain.bind(this)
     this.authCallback = this.authCallback.bind(this)
+
+    //registerScore's displayRanking method
+    this.registerScore = this.registerScore.bind(this)
+    this.displayRanking = this.displayRanking.bind(this)
+
+    //this.debug = this.debug.bind(this)
   }
 
   componentDidMount () {
@@ -59,6 +66,17 @@ class App extends React.Component {
   getGameData () {
     return { ...this.state.gameData.toJS() }
   }
+
+  displayRanking () {
+  alert("displayRanking() called")
+
+  }
+  registerScore () {
+    alert("registerScore called")
+    this.setState({ selectTopic: 'register-score' })
+
+  }
+
 
   updateGameData (_state) {
     const { gameData } = this.state
@@ -93,16 +111,25 @@ class App extends React.Component {
   getMenuScreen () {
     let topic = this.state.selectTopic
     let isFirstTime = this.state.firstUse
-
+    alert("topic: " + topic)
     switch (topic) {
+
+      case 'register-score':
+        return <RegisterScore
+           back={this.back}
+           displayRanking={this.displayRanking}
+           />
       case 'rankBoard':
         return <RankBoard
           isFirstTime={isFirstTime}
           users={this.storage.getRankData(1, 8)}
-          back={this.back} />
+          back={this.back} 
+          displayRanking={this.displayRanking}
+          registerScore={this.registerScore} />
       case 'auth':
         return <AuthKeppin
-          authCallback={this.authCallback} />
+          authCallback={this.authCallback} 
+          debug={this.debug} />
       default:
         return <Menu
           isFirstTime={isFirstTime}

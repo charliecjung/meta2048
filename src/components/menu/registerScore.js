@@ -1,7 +1,7 @@
 import React from 'react'
 import { addBtnTouchListener } from '../../util'
 
-class RankBoard extends React.Component {
+class RegisterScore extends React.Component {
   constructor (props) {
     super(props)
     this.buttons = []
@@ -11,22 +11,12 @@ class RankBoard extends React.Component {
     addBtnTouchListener(this.buttons)
   }
 
-  getRankTable () {
-    return this.props.users.map((user, index) => (
-      <tr key={index}>
-        <td>{user.rank}</td>
-        <td>{user.name}</td>
-        <td>{user.score}</td>
-      </tr>
-    ))
-  }
-
 
   render () {
     let data = this.props
     return (
       <div>
-        <h2>RankingRender</h2>
+        <h2>myRank</h2>
         <table className='padding-table-columns' align='center'>
           <thead key='head'>
             <tr>
@@ -35,12 +25,10 @@ class RankBoard extends React.Component {
               <th align='left'>Score</th>
             </tr>
           </thead>
-          <tbody>{this.getRankTable()}</tbody>
         </table>
-        <span className='register-rankboard btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.registerScore()}>Register Score</span>
+        <span className='registerScore btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.displayRanking()}>Register Score</span>
       </div>
     )
   }
 }
-
-export default RankBoard
+export default RegisterScore

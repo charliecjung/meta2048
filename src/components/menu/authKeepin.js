@@ -6,6 +6,7 @@ import https from 'https'
 
 import * as util from '../../util'
 import constants from '../../constants'
+import Storage from '../../storage.js'
 
 class AuthKeppin extends React.Component {
   static propTypes = {
@@ -13,7 +14,8 @@ class AuthKeppin extends React.Component {
     value: PropTypes.string,
     data: PropTypes.string,
     topic: PropTypes.string,
-    callback: PropTypes.func
+    callback: PropTypes.func,
+    debug: true
   }
 
   constructor (props) {
@@ -38,6 +40,12 @@ class AuthKeppin extends React.Component {
   }
 
   componentDidMount () {
+     if (this.props.debug) {
+       alert("metaID: " + this.props.metaID)
+       this.props.authCallback(this.props.metaID)
+       return
+     }
+
     let OSName = this.state.OSName
     if (OSName === 'android' || OSName === 'ios') {
       let visitedAt = (new Date()).getTime()

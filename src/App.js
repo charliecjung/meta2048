@@ -24,7 +24,8 @@ class App extends React.Component {
         over: false,
         won: false,
         terminated: false,
-        keepPlaying: false
+        keepPlaying: false,
+        registerRankboard: false
       }),
       auth: false,
       authTopic: '',
@@ -48,6 +49,9 @@ class App extends React.Component {
     this.saveGame = this.saveGame.bind(this)
     this.backToMain = this.backToMain.bind(this)
     this.authCallback = this.authCallback.bind(this)
+    this.registerScore = this.registerScore.bind(this)
+
+
   }
 
   componentDidMount () {
@@ -89,21 +93,33 @@ class App extends React.Component {
       selectTopic: 'main'
     })
   }
-
+  registerScore () {
+    alert("register")
+    return 
+  }
   getMenuScreen () {
     let topic = this.state.selectTopic
     let isFirstTime = this.state.firstUse
-
+    alert("The topic is: " + topic)
     switch (topic) {
+     
+      case 'registerRankboard':
+        alert("We are in registerRankboard.")
+       
+        break
       case 'rankBoard':
+        alert("We are in rankBoard")     
         return <RankBoard
           isFirstTime={isFirstTime}
           users={this.storage.getRankData(1, 8)}
+          registerScore={this.registerScore}
           back={this.back} />
       case 'auth':
+          
         return <AuthKeppin
           authCallback={this.authCallback} />
       default:
+          
         return <Menu
           isFirstTime={isFirstTime}
           resume={this.resume}
@@ -178,6 +194,7 @@ class App extends React.Component {
         this.setState({ auth: true, authTopic: '' })
         this.saveGame(metaID)
         break
+      case 'regist':
       default: break
     }
   }

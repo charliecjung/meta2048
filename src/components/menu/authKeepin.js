@@ -42,7 +42,7 @@ class AuthKeppin extends React.Component {
     console.log(this.uri)
 
     this.storage = new Storage()
-    var temper = Object.keys(props)
+ 
     
   }
   
@@ -51,13 +51,13 @@ class AuthKeppin extends React.Component {
        //return
      
   componentDidMount () {
-    let OSName = this.state.OSName
+    //let OSName = this.state.OSName
  
       this.props.authCallback(this.storage.metaID, this.state.isAuthenticated)
       return <AuthKeppin />
 
 
-    
+    /*
     if (OSName === 'android' || OSName === 'ios') {
       let visitedAt = (new Date()).getTime()
       document.checkframe.location = this.uri
@@ -65,6 +65,7 @@ class AuthKeppin extends React.Component {
     } else {
       this.makeQR()
     }
+    */
   }
 
   componentWillUnmount () {

@@ -8,7 +8,7 @@ import constants from './constants'
 import Storage from './storage'
 
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
-import { PersonalRankBoard, Test, Menu, RankBoard, AuthKeppin } from './components/menu'
+import { Menu, RankBoard, AuthKeppin } from './components/menu'
 
 class App extends React.Component {
   constructor (props) {
@@ -188,7 +188,7 @@ class App extends React.Component {
   authCallback (metaID, isAuthenticated) {
     console.log('come back App.js')
     this.setState({ selectTopic: 'rankBoard' })
-    var keys = Object.keys(this.props)
+ 
 
 
 

@@ -33,8 +33,7 @@ class PersonalRankBoard extends React.Component {
 
 
   render () {
-    alert("PersonalObjKeys: " + Object.keys(this.props))
-    alert("auth prop: " + this.state.auth)
+
     let data = this.props
     return (
       <div>

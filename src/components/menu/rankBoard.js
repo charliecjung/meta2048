@@ -6,9 +6,8 @@ class RankBoard extends React.Component {
   constructor (props) {
     super(props)
     this.storage = new Storage()
-    alert("storage: " + Object.keys(this.storage))
-    var username = this.storage.username
-    var temp = this.storage.dumyUsers
+  
+
     this.buttons = []
   }
   
@@ -19,7 +18,7 @@ class RankBoard extends React.Component {
   }
 
   highlightPlayer() {
-  alert("length: " + this.props.users.length)
+
   for (let i = 0; i < this.props.users.length; i++) {
     //alert("this.username: " + this.props.users[i].name)
     if (this.props.users[i].name === this.storage.username) {
@@ -30,8 +29,9 @@ class RankBoard extends React.Component {
    
   }
   getRankTable () {
-   
+    if (this.props.auth) {
     this.highlightPlayer();
+    }
 
 
 

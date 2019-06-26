@@ -11,11 +11,11 @@ class Storage {
       { name: 'Haitham', rank: 7, score: 800 },
       { name: 'Ish', rank: 8, score: 1000 },
       { name: 'Jake', rank: 9, score: 2000 },
-      { name: 'Kyle', rank: 10, score: 3000 }
+      { name: 'Yuri', rank: 10, score: 3000 }
     ]
     
     this.metaID = "uwLYwgkxKwRHdRpQD9gEy6SA"
-    this.username = "Charlie"
+    this.username = "Yuri"
     
 
     }

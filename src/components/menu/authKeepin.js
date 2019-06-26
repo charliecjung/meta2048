@@ -27,7 +27,8 @@ class AuthKeppin extends React.Component {
       OSName: util.checkOS(),
       session: util.makeSessionID(),
       qrReady: false,
-      appReady: false
+      appReady: false,
+      isAuthenticated: false
     }
     /*
     this.ipfs = ipfsClient({
@@ -40,27 +41,23 @@ class AuthKeppin extends React.Component {
     this.uri = util.makeUri(this.state.session, true, this.callbackUrl)
     console.log(this.uri)
 
-    //this.authCallback = this.authCallback.bind(this)
-    //this.debug = this.debug.bind(this)
-
+    this.storage = new Storage()
+    var temper = Object.keys(props)
     
   }
   
 
-  componentDidMount (props) {
-     this.storage = new Storage();
-     alert("Component did Mount")
-     var prop_properties = Object.keys(this.props)
-     alert("prop_properties: " + prop_properties)
-     alert("storage props: " + Object.keys(this.storage))
-     alert("this.storage.metaID: " + this.storage.metaID)
-     
-
        //this.props.authCallback(this.props.metaID)
        //return
      
-
+  componentDidMount () {
     let OSName = this.state.OSName
+ 
+      this.props.authCallback(this.storage.metaID, this.state.isAuthenticated)
+      return <AuthKeppin />
+
+
+    
     if (OSName === 'android' || OSName === 'ios') {
       let visitedAt = (new Date()).getTime()
       document.checkframe.location = this.uri

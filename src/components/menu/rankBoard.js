@@ -6,7 +6,9 @@ class RankBoard extends React.Component {
   constructor (props) {
     super(props)
     this.storage = new Storage()
-
+    alert("storage: " + Object.keys(this.storage))
+    var username = this.storage.username
+    var temp = this.storage.dumyUsers
     this.buttons = []
   }
   
@@ -16,12 +18,25 @@ class RankBoard extends React.Component {
     addBtnTouchListener(this.buttons)
   }
 
-  getRankTable () {
-    if (2==2) {
-      alert("jsx worked")
+  highlightPlayer() {
+  alert("length: " + this.props.users.length)
+  for (let i = 0; i < this.props.users.length; i++) {
+    //alert("this.username: " + this.props.users[i].name)
+    if (this.props.users[i].name === this.storage.username) {
+      //We are at username
+      this.props.users[i].name = this.props.users[i].name.toUpperCase()
     }
+  }
+   
+  }
+  getRankTable () {
+   
+    this.highlightPlayer();
+
+
+
     return this.props.users.map((user, index) => (
-  
+      
       <tr key={index}>
         <td>{user.rank}</td>
         <td>{user.name}</td>

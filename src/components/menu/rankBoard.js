@@ -26,12 +26,15 @@ class RankBoard extends React.Component {
       this.props.users[i].name = this.props.users[i].name.toUpperCase()
     }
   }
-   
-  }
+}
+
+ 
   getRankTable () {
     if (this.props.auth) {
     this.highlightPlayer();
-    }
+    } 
+    
+    
 
 
 

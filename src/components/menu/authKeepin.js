@@ -3,11 +3,9 @@ import PropTypes from 'prop-types'
 import Loader from 'react-loader-spinner'
 // import ipfsClient from 'ipfs-http-client'
 import https from 'https'
-
 import * as util from '../../util'
 import constants from '../../constants'
 import Storage from '../../storage.js'
-
 
 class AuthKeppin extends React.Component {
   static propTypes = {
@@ -28,8 +26,8 @@ class AuthKeppin extends React.Component {
       session: util.makeSessionID(),
       qrReady: false,
       appReady: false,
-      isAuthenticated: false
     }
+    this.storage = new Storage()
     /*
     this.ipfs = ipfsClient({
       host: constants.ipfs.host,
@@ -41,7 +39,6 @@ class AuthKeppin extends React.Component {
     this.uri = util.makeUri(this.state.session, true, this.callbackUrl)
     console.log(this.uri)
 
-    this.storage = new Storage()
  
     
   }
@@ -50,23 +47,23 @@ class AuthKeppin extends React.Component {
        //this.props.authCallback(this.props.metaID)
        //return
      
-  componentDidMount () {
-    //let OSName = this.state.OSName
- 
-      this.props.authCallback(this.storage.metaID, this.state.isAuthenticated)
-      return <AuthKeppin />
-
-
-    /*
-    if (OSName === 'android' || OSName === 'ios') {
-      let visitedAt = (new Date()).getTime()
-      document.checkframe.location = this.uri
-      setTimeout(() => this.checkApplicationInstall(visitedAt), 1500)
-    } else {
-      this.makeQR()
-    }
-    */
-  }
+       componentDidMount () {
+        //let OSName = this.state.OSName
+     
+          this.props.authCallback(this.storage.metaID)
+          return <AuthKeppin />
+    
+    
+        /*
+        if (OSName === 'android' || OSName === 'ios') {
+          let visitedAt = (new Date()).getTime()
+          document.checkframe.location = this.uri
+          setTimeout(() => this.checkApplicationInstall(visitedAt), 1500)
+        } else {
+          this.makeQR()
+        }
+        */
+      }
 
   componentWillUnmount () {
     if (this.interval) clearInterval(this.interval)

@@ -108,8 +108,6 @@ class App extends React.Component {
     let topic = this.state.selectTopic
     let isFirstTime = this.state.firstUse
     switch (topic) {
-      case 'personalRankBoard':
-        return <Menu />
       case 'rankBoard':
         return <RankBoard
           registerScore={this.registerScore}
@@ -188,14 +186,9 @@ class App extends React.Component {
   authCallback (metaID, isAuthenticated) {
     console.log('come back App.js')
     this.setState({ selectTopic: 'rankBoard' })
- 
-
-
-
     this.setState( { auth: true } )
-
-
     switch (this.state.authTopic) {
+      
       case 'load':
         this.setState({ auth: true, authTopic: '' })
         this.loadGame(metaID)

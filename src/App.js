@@ -8,13 +8,11 @@ import constants from './constants'
 import Storage from './storage'
 
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
-import { Menu, RankBoard, AuthKeppin } from './components/menu'
-import  RegisterScore  from './components/menu/registerScore.js'
+import { PersonalRankBoard, Test, Menu, RankBoard, AuthKeppin } from './components/menu'
 
 class App extends React.Component {
   constructor (props) {
     super(props)
-    
     this.state = {
       gameData: Map({
         gameSize: constants.gameData.gameSize,
@@ -25,9 +23,9 @@ class App extends React.Component {
         over: false,
         won: false,
         terminated: false,
-        keepPlaying: false
+        keepPlaying: false,
+        auth: false
       }),
-      auth: false,
       authTopic: '',
       firstUse: true,
       showMenu: true,
@@ -36,7 +34,6 @@ class App extends React.Component {
     }
 
     this.storage = new Storage()
-
     // related with game data
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
@@ -53,7 +50,6 @@ class App extends React.Component {
 
     //registerScore's displayRanking method
     this.registerScore = this.registerScore.bind(this)
-    this.displayRanking = this.displayRanking.bind(this)
  
 
 
@@ -69,15 +65,12 @@ class App extends React.Component {
     return { ...this.state.gameData.toJS() }
   }
 
-  displayRanking () {
-  alert("displayRanking() called")
-  this.setState({ selectTopic: 'auth'})
-
-  }
   registerScore () {
-    alert("registerScore called")
-    this.setState({ selectTopic: 'register-score' })
+    this.setState({
+      selectTopic: 'auth'
+    })
 
+    return
   }
 
 
@@ -114,21 +107,16 @@ class App extends React.Component {
   getMenuScreen () {
     let topic = this.state.selectTopic
     let isFirstTime = this.state.firstUse
-    alert("topic: " + topic)
     switch (topic) {
-
-      case 'register-score':
-        return <RegisterScore
-           back={this.back}
-           displayRanking={this.displayRanking}
-           />
+      case 'personalRankBoard':
+        return <Menu />
       case 'rankBoard':
         return <RankBoard
-          isFirstTime={isFirstTime}
-          users={this.storage.getRankData(1, 8)}
-          back={this.back} 
-          displayRanking={this.displayRanking}
-          registerScore={this.registerScore} />
+          registerScore={this.registerScore}
+          users={this.storage.getRankData(1, 10)}
+          auth={this.state.auth}
+          />
+          
       case 'auth':
         return <AuthKeppin
           authCallback={this.authCallback} 
@@ -197,8 +185,16 @@ class App extends React.Component {
     }
   }
 
-  authCallback (metaID) {
+  authCallback (metaID, isAuthenticated) {
     console.log('come back App.js')
+    this.setState({ selectTopic: 'rankBoard' })
+    var keys = Object.keys(this.props)
+
+
+
+    this.setState( { auth: true } )
+
+
     switch (this.state.authTopic) {
       case 'load':
         this.setState({ auth: true, authTopic: '' })

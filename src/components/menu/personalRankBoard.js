@@ -1,11 +1,9 @@
 import React from 'react'
 import { addBtnTouchListener } from '../../util'
-import Storage from '../../storage.js'
 
-class RankBoard extends React.Component {
+class PersonalRankBoard extends React.Component {
   constructor (props) {
     super(props)
-    this.storage = new Storage()
 
     this.buttons = []
   }
@@ -17,11 +15,12 @@ class RankBoard extends React.Component {
   }
 
   getRankTable () {
-    if (2==2) {
-      alert("jsx worked")
+    var result = ""
+    for (let i = 0; i < this.storage.dumyUsers.length; i++) {
+      result += this.storage.dumyUsers[i] + "<br>"
     }
-    return this.props.users.map((user, index) => (
-  
+    /*
+    return this.props.dumyUsers.map((user, index) => (
       <tr key={index}>
         <td>{user.rank}</td>
         <td>{user.name}</td>
@@ -29,34 +28,17 @@ class RankBoard extends React.Component {
       </tr>
     ))
   }
+  */
+ //return result
 
 
   render () {
-
+    alert("PersonalObjKeys: " + Object.keys(this.props))
+    alert("auth prop: " + this.state.auth)
     let data = this.props
-    if (this.props.auth) {
-      return (
-      <div>
-        <h2>Your Ranking</h2>
-        <table className='padding-table-columns' align='center'>
-          <thead key='head'>
-            <tr>
-              <th align='left'>Rank</th>
-              <th align='left'>Player</th>
-              <th align='left'>Score</th>
-            </tr>
-          </thead>
-          <tbody>{this.getRankTable()}</tbody>
-        </table>
-        <span className='register-rankboard btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.registerScore()}>Register Score</span>
-        <h2> Your Meta Id: {this.storage.metaID} </h2>
-      </div>
-      )
-
-    } 
     return (
       <div>
-        <h2>Rankings</h2>
+        <h2>Hello</h2>
         <table className='padding-table-columns' align='center'>
           <thead key='head'>
             <tr>
@@ -72,6 +54,7 @@ class RankBoard extends React.Component {
     )
   }
 }
-export default RankBoard
+export default PersonalRankBoard
+
 
 

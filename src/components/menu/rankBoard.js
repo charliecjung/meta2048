@@ -5,6 +5,9 @@ import Storage from '../../storage.js'
 class RankBoard extends React.Component {
   constructor (props) {
     super(props)
+    var myName = "";
+    var myRank = "";
+    var myScore = "";
     this.storage = new Storage()
   
 
@@ -24,6 +27,9 @@ class RankBoard extends React.Component {
     if (this.props.users[i].name === this.storage.username) {
       //We are at username
       this.props.users[i].name = this.props.users[i].name.toUpperCase()
+      this.myName = this.props.users[i].name
+      this.myRank = this.props.users[i].rank
+      this.myScore = this.props.users[i].score
     }
   }
 }
@@ -67,8 +73,10 @@ class RankBoard extends React.Component {
           <tbody>{this.getRankTable()}</tbody>
         </table>
         <span className='register-rankboard btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.registerScore()}>Register Score</span>
-        <h2> Your Meta Id: {this.storage.metaID} </h2>
-      </div>
+        <h2> Your Name: {this.myName}</h2>
+        <h2> Your Rank: {this.myRank} </h2>
+        <h2> Your Score: {this.myScore} </h2> 
+        </div>
       )
 
     } 

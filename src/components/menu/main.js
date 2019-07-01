@@ -1,12 +1,10 @@
 import React from 'react'
 import { addBtnTouchListener } from '../../util'
-import RankBoard from './rankBoard.js'
 
 class Menu extends React.Component {
   constructor (props) {
     super(props)
     this.buttons = []
-    alert("menu props: " + Object.keys(props))
   }
 
   componentDidMount () {

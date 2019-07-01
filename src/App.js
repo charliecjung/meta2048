@@ -13,7 +13,6 @@ import { Menu, RankBoard, AuthKeppin } from './components/menu'
 class App extends React.Component {
   constructor (props) {
     super(props)
-    alert("Constructor Props: " + Object.keys(props))
     this.state = {
       gameData: Map({
         gameSize: constants.gameData.gameSize,
@@ -25,8 +24,7 @@ class App extends React.Component {
         won: false,
         terminated: false,
         keepPlaying: false,
-        auth: false,
-       
+        auth: false
       }),
       authTopic: '',
       firstUse: true,
@@ -49,14 +47,9 @@ class App extends React.Component {
     this.saveGame = this.saveGame.bind(this)
     this.backToMain = this.backToMain.bind(this)
     this.authCallback = this.authCallback.bind(this)
-    //this.refreshBoard = this.refereshBoard.bind(this)
 
     //registerScore's displayRanking method
     this.registerScore = this.registerScore.bind(this)
-
-
-    //rankBoard's myName, myRank, myScore
-    //this.myName = this.myName.bind(this)
  
 
 
@@ -65,9 +58,7 @@ class App extends React.Component {
   componentDidMount () {
     gameScript.classlist_polyfill()
     gameScript.animframe_polyfill()
-    
   }
-  
 
   // related with game data
   getGameData () {
@@ -105,9 +96,9 @@ class App extends React.Component {
   // related with menu
   showMenu () {
     const { gameData } = this.state
-     console.log('did it')
+
     this.setState({
-      gameData: gameData.set('terminated', true).set('auth', false),
+      gameData: gameData.set('terminated', true),
       showMenu: true,
       selectTopic: 'main'
     })
@@ -116,40 +107,29 @@ class App extends React.Component {
   getMenuScreen () {
     let topic = this.state.selectTopic
     let isFirstTime = this.state.firstUse
-    alert("topic: " + topic)
     switch (topic) {
       case 'rankBoard':
         return <RankBoard
           registerScore={this.registerScore}
           users={this.storage.getRankData(1, 10)}
-          auth={this.state.gameData.get('auth')}
-          topic={this.state.selectTopic}
+          auth={this.state.auth}
           />
-          
           
       case 'auth':
         return <AuthKeppin
           authCallback={this.authCallback} 
            />
-      
-          
       default:
-          return <Menu
+        return <Menu
           isFirstTime={isFirstTime}
           resume={this.resume}
           startGame={this.startGame}
           showRank={this.showRank}
           saveGame={this.saveGame}
-          loadGame={this.loadGame}
-
-           />
+          loadGame={this.loadGame} />
     }
   }
 
-
-  resetScoreboard() {
-    
-  }
   backToMain () {
     this.setState({ selectTopic: 'main' })
   }
@@ -222,7 +202,6 @@ class App extends React.Component {
   }
 
   render () {
-    alert("App props: " + Object.keys(this.props))
     return (
       <div className='container'>
         <Heading />

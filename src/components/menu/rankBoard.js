@@ -5,6 +5,7 @@ import Storage from '../../storage.js'
 class RankBoard extends React.Component {
   constructor (props) {
     super(props)
+
     var myName = "";
     var myRank = "";
     var myScore = "";
@@ -24,9 +25,9 @@ class RankBoard extends React.Component {
 
   for (let i = 0; i < this.props.users.length; i++) {
     //alert("this.username: " + this.props.users[i].name)
-    if (this.props.users[i].name === this.storage.username) {
+    if (this.props.users[i].name.toUpperCase() === this.storage.username.toUpperCase()) {
       //We are at username
-      this.props.users[i].name = this.props.users[i].name.toUpperCase()
+      //this.props.users[i].name = this.props.users[i].name.toUpperCase()
       this.myName = this.props.users[i].name
       this.myRank = this.props.users[i].rank
       this.myScore = this.props.users[i].score
@@ -41,7 +42,7 @@ class RankBoard extends React.Component {
     } 
     
     
-
+    
 
 
     return this.props.users.map((user, index) => (

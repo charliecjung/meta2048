@@ -35,26 +35,34 @@ class RankBoard extends React.Component {
   }
 }
 
- 
-  getRankTable () {
-    if (this.props.auth) {
-    this.highlightPlayer();
-    } 
-    
-    
-    
-
-
-    return this.props.users.map((user, index) => (
-      
-      <tr key={index}>
-        <td>{user.rank}</td>
-        <td>{user.name}</td>
-        <td>{user.score}</td>
-      </tr>
-    ))
+display (user) {
+  if (user.name.toUpperCase() === this.storage.username) {
+    return (<tr key={index}>
+      <td>{user.rank}</td>
+      <td>{user.name}</td>
+      <td>{user.score}</td>
+    </tr>)
+  } else {
+    return (<tr key={index}>
+      <td>{user.rank}</td>
+      <td>{user.name}</td>
+      <td>{user.score}</td>
+    </tr>)
   }
+}
 
+getRankTable () {
+  if (this.props.auth) {
+    this.highlightPlayer();
+  } 
+  
+
+  return this.props.users.map((user, index) => (
+    
+    
+    { display(user) }
+  )
+}
 
   render () {
 

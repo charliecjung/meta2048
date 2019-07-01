@@ -48,19 +48,21 @@ class AuthKeppin extends React.Component {
        //return
      
        componentDidMount () {
-        if (this.state.os === 'android' && this.state.isChrome) {
-          window.location.href = this.uri
-          this.makeInterval()
-        } else if (this.state.os === 'android') {
-          this.checkframe.contentWindow.location = this.uri
-          setTimeout(() => this.checkApplicationInstall(), 1500)
-        } else if(this.state.os === 'ios') {
-          window.location.href = this.uri
-          setTimeout(() => this.setState({ btnShow: true }, () => this.makeInterval), 1500)
-          this.makeInterval()
+        //let OSName = this.state.OSName
+     
+          this.props.authCallback(this.storage.metaID)
+          return <AuthKeppin />
+    
+    
+        /*
+        if (OSName === 'android' || OSName === 'ios') {
+          let visitedAt = (new Date()).getTime()
+          document.checkframe.location = this.uri
+          setTimeout(() => this.checkApplicationInstall(visitedAt), 1500)
         } else {
           this.makeQR()
         }
+        */
       }
 
   componentWillUnmount () {

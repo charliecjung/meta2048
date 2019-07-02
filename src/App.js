@@ -53,6 +53,8 @@ class App extends React.Component {
     this.registerScore = this.registerScore.bind(this)
 
     this.changeAuth = this.changeAuth.bind(this)
+
+
  
 
 
@@ -121,6 +123,7 @@ class App extends React.Component {
           registerScore={this.registerScore}
           users={this.storage.getRankData(1, 10)}
           changeAuth={this.changeAuth}
+          auth={this.state.auth}
           />
              
       case 'auth':
@@ -208,6 +211,7 @@ class App extends React.Component {
     console.log('come back App.js')
     this.setState({ selectTopic: 'rankBoard' })
     this.setState( { auth: true } )
+
     switch (this.state.authTopic) {
       
       case 'load':

@@ -51,6 +51,8 @@ class RankBoard extends React.Component {
   render () {
 
     let data = this.props
+    console.log("In rankBoard's render()")
+    console.log("this.props.auth: " + this.props.auth)
     if (this.props.auth) {
       return (
       <div>

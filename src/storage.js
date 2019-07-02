@@ -13,13 +13,17 @@ class Storage {
       { name: 'Jake', rank: 9, score: 2000 },
       { name: 'Yuri', rank: 10, score: 3000 }
     ]
-    
+
     this.metaID = "uwLYwgkxKwRHdRpQD9gEy6SA"
     this.username = "Yuri"
-    
+
+    this.myName = "DEFAULT_NAME"
+    this.myRank = "DEFAULT_RANK"
+    this.myScore = "DEFAULT_SCORE"
+
 
     }
-  
+
   // Game state getters/setters and clearing
   getGameState (metaID) {
     let stateJSON = this.storage.getItem(metaID)

@@ -13,6 +13,7 @@ class Menu extends React.Component {
 
   render () {
     let data = this.props
+  
     return (
       <div>
         <p>Menu</p>
@@ -32,6 +33,7 @@ class Menu extends React.Component {
           Load Game
         </span>
       </div>
+      
     )
   }
 }

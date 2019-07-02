@@ -5,13 +5,10 @@ import Storage from '../../storage.js'
 class RankBoard extends React.Component {
   constructor (props) {
     super(props)
-
     var myName = "";
     var myRank = "";
     var myScore = "";
     this.storage = new Storage()
-  
-
     this.buttons = []
   }
   
@@ -25,9 +22,9 @@ class RankBoard extends React.Component {
 
   for (let i = 0; i < this.props.users.length; i++) {
     //alert("this.username: " + this.props.users[i].name)
-    if (this.props.users[i].name.toUpperCase() === this.storage.username.toUpperCase()) {
+    if (this.props.users[i].name === this.storage.username) {
       //We are at username
-      //this.props.users[i].name = this.props.users[i].name.toUpperCase()
+      this.props.users[i].name = this.props.users[i].name.toUpperCase()
       this.myName = this.props.users[i].name
       this.myRank = this.props.users[i].rank
       this.myScore = this.props.users[i].score
@@ -35,34 +32,21 @@ class RankBoard extends React.Component {
   }
 }
 
-display (user) {
-  if (user.name.toUpperCase() === this.storage.username) {
-    return (<tr key={index}>
-      <td>{user.rank}</td>
-      <td>{user.name}</td>
-      <td>{user.score}</td>
-    </tr>)
-  } else {
-    return (<tr key={index}>
-      <td>{user.rank}</td>
-      <td>{user.name}</td>
-      <td>{user.score}</td>
-    </tr>)
-  }
-}
-
-getRankTable () {
-  if (this.props.auth) {
+ 
+  getRankTable () {
+    if (this.props.auth) {
     this.highlightPlayer();
-  } 
-  
+    } 
+    return this.props.users.map((user, index) => (
+      
+      <tr key={index}>
+        <td>{user.rank}</td>
+        <td>{user.name}</td>
+        <td>{user.score}</td>
+      </tr>
+    ))
+  }
 
-  return this.props.users.map((user, index) => (
-    
-    
-    { display(user) }
-  )
-}
 
   render () {
 

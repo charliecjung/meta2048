@@ -24,8 +24,9 @@ class App extends React.Component {
         won: false,
         terminated: false,
         keepPlaying: false,
-        auth: false
+        
       }),
+      auth: false,
       authTopic: '',
       firstUse: true,
       showMenu: true,
@@ -50,6 +51,8 @@ class App extends React.Component {
 
     //registerScore's displayRanking method
     this.registerScore = this.registerScore.bind(this)
+
+    this.changeAuth = this.changeAuth.bind(this)
  
 
 
@@ -66,12 +69,17 @@ class App extends React.Component {
   }
 
   registerScore () {
-    this.setState({
-      selectTopic: 'auth'
-    })
-
-    return
-  }
+    this.setState({ selectTopic: 'auth'})
+    console.log("Clicked Register Score")
+    let data = this.props
+    console.log("Inside changeAuth")
+    console.log("auth BEFORE value: " + this.state.auth)
+    if (this.state.auth === false) {
+      this.state.auth = true
+    }
+    console.log("auth AFTER value: " + this.state.auth)
+    return null
+  };
 
 
   updateGameData (_state) {
@@ -112,9 +120,9 @@ class App extends React.Component {
         return <RankBoard
           registerScore={this.registerScore}
           users={this.storage.getRankData(1, 10)}
-          auth={this.state.auth}
+          changeAuth={this.changeAuth}
           />
-          
+             
       case 'auth':
         return <AuthKeppin
           authCallback={this.authCallback} 
@@ -126,10 +134,14 @@ class App extends React.Component {
           startGame={this.startGame}
           showRank={this.showRank}
           saveGame={this.saveGame}
-          loadGame={this.loadGame} />
+          loadGame={this.loadGame}
+          changeAuth={this.changeAuth}
+          registerScore={this.registerScore} />
     }
   }
-
+  changeAuth (state, props) {
+    
+  }
   backToMain () {
     this.setState({ selectTopic: 'main' })
   }
@@ -154,7 +166,16 @@ class App extends React.Component {
   }
 
   showRank () {
+    console.log("We are in show")
     this.setState({ selectTopic: 'rankBoard' })
+    this.props = {
+      auth: !this.state.auth
+    }
+    this.resetScoreboard()
+  }
+  resetScoreboard() {
+    this.setState({ auth: false})
+    return null
   }
 
   loadGame (metaID) {
@@ -183,7 +204,7 @@ class App extends React.Component {
     }
   }
 
-  authCallback (metaID, isAuthenticated) {
+  authCallback (metaID) {
     console.log('come back App.js')
     this.setState({ selectTopic: 'rankBoard' })
     this.setState( { auth: true } )

@@ -42,14 +42,32 @@ class AuthKeppin extends React.Component {
  
     
   }
-  
-
-       //this.props.authCallback(this.props.metaID)
-       //return
+  //Credits to João Victor for creating the Javascript UUID Generator
+  s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  guid() {
+    
+    return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
+      this.s4() + '-' + this.s4() + this.s4() + this.s4();
+  }
      
+
        componentDidMount () {
         //let OSName = this.state.OSName
-     
+          var randomID = this.guid()
+          console.log("randomID: " + randomID)
+          if (this.storage.metaID === "DEFAULT_METAID") {
+            alert("Successfully created random Meta ID!")
+            this.storage.metaID = randomID
+            alert("this.storage.metaID after: " + this.storage.metaID)
+          } else {
+            this.storage.metaID = "DEFAULT_METAID_ERROR"
+            alert("Error has occurred. Cannot create unique METAID")
+          }
+          alert("Calling back: " + this.storage.metaID)
           this.props.authCallback(this.storage.metaID)
           return <AuthKeppin />
     

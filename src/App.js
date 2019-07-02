@@ -27,10 +27,12 @@ class App extends React.Component {
         
       }),
       auth: false,
+      metaID: -999,
       authTopic: '',
       firstUse: true,
       showMenu: true,
       selectTopic: 'menu',
+      
      
     }
 
@@ -124,6 +126,7 @@ class App extends React.Component {
           users={this.storage.getRankData(1, 10)}
           changeAuth={this.changeAuth}
           auth={this.state.auth}
+          metaID={this.state.metaID}
           />
              
       case 'auth':
@@ -207,20 +210,22 @@ class App extends React.Component {
     }
   }
 
-  authCallback (metaID) {
+  authCallback (_metaID) {
     console.log('come back App.js')
     this.setState({ selectTopic: 'rankBoard' })
-    this.setState( { auth: true } )
+    this.setState( { auth: true, metaID:  _metaID} )
+    alert("auth metaid: " + this.state.metaID)
+    
 
     switch (this.state.authTopic) {
       
       case 'load':
         this.setState({ auth: true, authTopic: '' })
-        this.loadGame(metaID)
+        this.loadGame(this.state.metaID)
         break
       case 'save':
         this.setState({ auth: true, authTopic: '' })
-        this.saveGame(metaID)
+        this.saveGame(this.state.metaID)
         break
       default: break
     }

@@ -225,7 +225,7 @@ class App extends React.Component {
       default: break
     }
   }
-
+  //We know that this.state.auth == true we can hide message.
   render () {
     return (
       <div className='container'>
@@ -234,10 +234,15 @@ class App extends React.Component {
         <div className='game-container'>
           {this.state.showMenu ? <div className='menu'>{this.getMenuScreen()}</div> : null}
           <Message />
+        
           <Grid />
           <div className='tile-container' />
         </div>
+        {this.state.auth === false &&
+
+        
         <Explanation />
+        }
         <hr />
       </div>
     )

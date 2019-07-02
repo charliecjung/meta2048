@@ -61,16 +61,35 @@ class RankBoard extends React.Component {
     } else {
       this.resetList();
     }
+
+
     return this.props.users.map((user, index) => (
       
-      <tr key={index}>
+      <div>
+        {console.log("this.props.auth: " + this.props.auth)}
+        {console.log("this.storage.username: " + this.storage.username)}
+        {console.log("user.name: " + user.name)}
+        {this.props.auth === true && this.storage.username.toUpperCase() === user.name.toUpperCase() ? (
+          <tr key={index}>
+          <td><mark>{user.rank}</mark></td>
+          <td><mark>{user.name}</mark></td>
+          <td><mark>{user.score}</mark></td>
+        </tr>
+        ) : (
+          <tr key={index}>
         <td>{user.rank}</td>
         <td>{user.name}</td>
         <td>{user.score}</td>
       </tr>
+        )}
+        </div>
     ))
-  }
-
+  
+    
+        }
+        
+       
+  
 
   render () {
 

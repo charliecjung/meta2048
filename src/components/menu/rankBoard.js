@@ -61,13 +61,29 @@ class RankBoard extends React.Component {
     } else {
       this.resetList();
     }
+    var auth = this.props.auth
     return this.props.users.map((user, index) => (
-      
-      <tr key={index}>
+      <div>
+        {console.log("user.name: " + user.name)}
+        {console.log("this.storage.username: " + this.storage.username)}
+      {this.props.auth === true && user.name.toUpperCase() === this.storage.username.toUpperCase() ? (
+        <tr key={index}>
+        <td><mark>{user.rank}</mark></td>
+        <td><mark>{user.name}</mark></td>
+        <td><mark>{user.score}</mark></td>
+      </tr>
+
+      ) : (
+        <tr key={index}>
         <td>{user.rank}</td>
         <td>{user.name}</td>
         <td>{user.score}</td>
       </tr>
+
+
+      )}
+      </div>
+      
     ))
   }
 
@@ -84,9 +100,9 @@ class RankBoard extends React.Component {
         <table className='padding-table-columns' align='center'>
           <thead key='head'>
             <tr>
-              <th align='left'>Rank</th>
-              <th align='left'>Player</th>
-              <th align='left'>Score</th>
+              <th align='center'>Rank</th>
+              <th align='center'>Player</th>
+              <th align='center'>Score</th>
             </tr>
           </thead>
           <tbody>{this.getRankTable()}</tbody>

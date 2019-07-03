@@ -14,16 +14,53 @@ class Storage {
       { name: 'Yuri', rank: 10, score: 3000 }
     ]
 
-    this.metaID = "DEFAULT_METAID"
+    
     this.username = "Yuri"
-
+    this.metaID = "DEFAULT_METAID"
     this.myName = "DEFAULT_NAME"
     this.myRank = "DEFAULT_RANK"
     this.myScore = "DEFAULT_SCORE"
-
+    this.loadData()
     
 
     }
+  loadData() {
+    if (this.metaID !== "DEFAULT_METAID") {
+      
+    } else {
+      this.metaID = "DEFAULT_METAID"
+    }
+
+    if (this.username !== "Yuri") {
+      
+    } else {
+      this.username = "Yuri"
+    }
+    if (this.myName !== "DEFAULT_NAME") {
+
+    } else {
+      this.myName = "DEFAULT_NAME"
+    }
+    if (this.myRank !== "DEFAULT_RANK") {
+
+    } else {
+      this.myRank = "DEFAULT_RANK"
+    }
+
+    if (this.myScore !== "DEFAULT_SCORE") {
+
+    } else {
+      this.myScore = "DEFAULT_SCORE"
+    }
+
+
+
+
+
+
+
+
+  }
   setMetaID(_metaID) {
     this.storage.setItem(this.props.metaID, _metaID)
   }

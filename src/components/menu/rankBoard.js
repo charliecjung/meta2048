@@ -66,7 +66,7 @@ class RankBoard extends React.Component {
       <div>
         {console.log("user.name: " + user.name)}
         {console.log("this.storage.username: " + this.storage.username)}
-      {this.props.auth === true && user.name.toUpperCase() === this.storage.username.toUpperCase() ? (
+      {this.props.auth === true && user.name.toUpperCase() === this.storage.username.toUpperCase() && this.props.metaID === this.props.APPMETAID ? (
         <tr key={index}>
         <td><mark>{user.rank}</mark></td>
         <td><mark>{user.name}</mark></td>
@@ -112,7 +112,7 @@ class RankBoard extends React.Component {
         <h2> Your Rank: {this.storage.myRank} </h2>
         <h2> Your Score: {this.storage.myScore} </h2> 
         <h2> Your MetaID: {this.props.metaID} </h2>
-        <h2> Storage metaid: {this.storage.metaID} </h2>
+        <h2> Storage metaid: {this.props.APPMETAID} </h2>
         </div>
       )
 

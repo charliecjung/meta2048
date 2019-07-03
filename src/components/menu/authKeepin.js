@@ -6,7 +6,6 @@ import https from 'https'
 import * as util from '../../util'
 import constants from '../../constants'
 import Storage from '../../storage.js'
-
 class AuthKeppin extends React.Component {
   static propTypes = {
     to: PropTypes.string,
@@ -15,12 +14,8 @@ class AuthKeppin extends React.Component {
     topic: PropTypes.string,
     callback: PropTypes.func
   }
- 
-  
-  
   constructor (props) {
     super(props)
-
     this.state = {
       OSName: util.checkOS(),
       session: util.makeSessionID(),
@@ -28,70 +23,25 @@ class AuthKeppin extends React.Component {
       appReady: false,
     }
     this.storage = new Storage()
-    /*
-    this.ipfs = ipfsClient({
-      host: constants.ipfs.host,
-      port: constants.ipfs.port,
-      protocol: constants.ipfs.protocol
-    })
-    */
     this.callbackUrl = util.makeCallbackUrl(this.state.session)
     this.uri = util.makeUri(this.state.session, true, this.callbackUrl)
-    console.log(this.uri)
-
- 
-    
   }
-  //Credits to João Victor for creating the Javascript UUID Generator
-  s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  guid() {
-    
-    return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
-      this.s4() + '-' + this.s4() + this.s4() + this.s4();
-  }
-     
-
        componentDidMount () {
-        //let OSName = this.state.OSName
-          var randomID = this.guid()
-          console.log("randomID: " + randomID)
+          var randomID = "test"
           if (this.storage.metaID === "DEFAULT_METAID") {
-            console.log("Successfully created random Meta ID!")
             this.storage.metaID = randomID
-            
           } else {
-         
             this.storage.metaID = "DEFAULT_METAID_ERROR"
             alert("Error has occurred. Cannot create unique METAID")
-            
           }
-         
           this.props.authCallback(this.storage.metaID)
           return <AuthKeppin />
-    
-    
-        /*
-        if (OSName === 'android' || OSName === 'ios') {
-          let visitedAt = (new Date()).getTime()
-          document.checkframe.location = this.uri
-          setTimeout(() => this.checkApplicationInstall(visitedAt), 1500)
-        } else {
-          this.makeQR()
-        }
-        */
       }
-
   componentWillUnmount () {
     if (this.interval) clearInterval(this.interval)
   }
-
   checkApplicationInstall (visitedAt) {
     let OSName = this.state.OSName
-
     if (OSName === 'android') {
       try {
         // check application
@@ -107,7 +57,6 @@ class AuthKeppin extends React.Component {
         }
       }
     }
-
     if (OSName === 'ios' && (new Date()).getTime() - visitedAt < 2000) {
       if (window.confirm('Keepin is not installed')) {
         window.location.href = constants.apppleAppStroe
@@ -116,23 +65,12 @@ class AuthKeppin extends React.Component {
 
     this.setState({ appReady: true }, () => this.makeInterval())
   }
-
   makeQR () {
     util.showQR(this.qrbox, this.uri).then((result) => this.setState({ qrReady: result }, () => this.makeInterval()))
-    /*
-    this.ipfs.add([Buffer.from(this.uri)], (err, ipfsHash) => {
-      if(!err) console.log('SendTransaction IPFS hash:', ipfsHash[0].hash)
-
-      let uri = err ? this.uri : ipfsHash[0].hash
-      util.showQR(this.qrbox, uri).then((result) => this.setState({ qrReady: result }, () => this.makeInterval()))
-    })
-    */
   }
-
   makeInterval () {
     this.interval = setInterval(() => this.checkResponse(), 1000)
   }
-
   checkResponse () {
     https.request({
       host: constants.cacheServer.host,
@@ -144,15 +82,12 @@ class AuthKeppin extends React.Component {
         if (data !== '') {
           clearInterval(this.interval)
           let result = JSON.parse(data)
-          console.log('meta id is: ', result.meta_id)
           if (this.props.authCallback) this.props.authCallback(result.meta_id)
         }
       })
     }).on('error', (err) => {
-      console.log('error: ', err)
     }).end()
   }
-
   render () {
     const OSName = this.state.OSName
     const qrBoxDisplay = this.state.qrReady ? 'block' : 'none'
@@ -181,5 +116,4 @@ class AuthKeppin extends React.Component {
     )
   }
 }
-
 export default AuthKeppin

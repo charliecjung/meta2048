@@ -1,46 +1,26 @@
 import React from 'react'
 import { addBtnTouchListener } from '../../util'
 import Storage from '../../storage.js'
-
 class RankBoard extends React.Component {
   constructor (props) {
-    console.log("new rankboard")
     super(props)
-    console.log("Prev Props: " + Object.keys(props))
- 
     this.storage = new Storage()
     this.buttons = []
   }
-  
-
-
   componentDidMount () {
     addBtnTouchListener(this.buttons)
   }
-
   highlightPlayer() {
-
   for (let i = 0; i < this.props.users.length; i++) {
- 
     if (this.props.users[i].name.toLowerCase() === this.storage.username.toLowerCase()) {
-      //We are at username
-      
-      console.log("BEFORE this.storage.myName: " + this.storage.myName)
-      console.log("BEFORE this.storage.myRank: " + this.storage.myRank)
-      console.log("BEFORE this.storage.myScore: " + this.storage.myScore)
       if (this.storage.myName === "DEFAULT_NAME" && this.storage.myRank === "DEFAULT_RANK" && this.storage.myScore === "DEFAULT_SCORE") {
-      console.log("Changing from default to real values")
       this.props.users[i].name = this.props.users[i].name.toUpperCase()
       this.storage.myName = this.props.users[i].name
       this.storage.myRank = this.props.users[i].rank
       this.storage.myScore = this.props.users[i].score
       
     } else if (this.storage.myName !== "DEFAULT_NAME" && this.storage.myRank !== "DEFAULT_RANK" && this.storage.myScore !== "DEFAULT_SCORE") {
-      console.log("Dont have to do anything: Real values made")
       } 
-      console.log("AFTER this.storage.myName: " + this.storage.myName)
-      console.log("AFTER this.storage.myRank: " + this.storage.myRank)
-      console.log("AFTER this.storage.myScore: " + this.storage.myScore)
    }
   }
 }
@@ -64,8 +44,6 @@ class RankBoard extends React.Component {
     var auth = this.props.auth
     return this.props.users.map((user, index) => (
       <div>
-        {console.log("user.name: " + user.name)}
-        {console.log("this.storage.username: " + this.storage.username)}
       {this.props.auth === true && user.name.toUpperCase() === this.storage.username.toUpperCase() ? (
         <tr key={index}>
         <td><mark>{user.rank}</mark></td>
@@ -91,8 +69,6 @@ class RankBoard extends React.Component {
   render () {
 
     let data = this.props
-    console.log("In rankBoard's render()")
-    console.log("this.props.auth: " + this.props.auth)
     if (this.props.auth) {
       return (
       <div>

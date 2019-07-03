@@ -13,16 +13,20 @@ class Storage {
       { name: 'Jake', rank: 9, score: 2000 },
       { name: 'Yuri', rank: 10, score: 3000 }
     ]
+
+    
     this.username = "Yuri"
     this.metaID = "DEFAULT_METAID"
     this.myName = "DEFAULT_NAME"
     this.myRank = "DEFAULT_RANK"
     this.myScore = "DEFAULT_SCORE"
     this.loadData()
+    
+
     }
   loadData() {
     if (this.metaID !== "DEFAULT_METAID") {
-
+      
     } else {
       this.metaID = "DEFAULT_METAID"
     }
@@ -48,6 +52,14 @@ class Storage {
     } else {
       this.myScore = "DEFAULT_SCORE"
     }
+
+
+
+
+
+
+
+
   }
   setMetaID(_metaID) {
     this.storage.setItem(this.props.metaID, _metaID)

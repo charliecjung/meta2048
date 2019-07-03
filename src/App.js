@@ -1,5 +1,6 @@
 import React from 'react'
 import { Map } from 'immutable'
+
 import './App.css'
 import './components/style/main.css'
 import gameScript from './components/js'
@@ -23,17 +24,20 @@ class App extends React.Component {
         won: false,
         terminated: false,
         keepPlaying: false,
+        
       }),
       auth: false,
+     
       metaID: -888,
       authTopic: '',
       firstUse: true,
       showMenu: true,
       selectTopic: 'menu',
+      
+     
     }
 
     this.storage = new Storage()
-
     // related with game data
     this.getGameData = this.getGameData.bind(this)
     this.updateGameData = this.updateGameData.bind(this)
@@ -50,10 +54,16 @@ class App extends React.Component {
 
     //registerScore's displayRanking method
     this.registerScore = this.registerScore.bind(this)
+
     this.changeAuth = this.changeAuth.bind(this)
+
+
+ 
+
+
   }
 
-  componentDidMount () { 
+  componentDidMount () {
     gameScript.classlist_polyfill()
     gameScript.animframe_polyfill()
   }
@@ -65,10 +75,14 @@ class App extends React.Component {
 
   registerScore () {
     this.setState({ selectTopic: 'auth'})
+    console.log("Clicked Register Score")
     let data = this.props
+    console.log("Inside changeAuth")
+    console.log("auth BEFORE value: " + this.state.auth)
     if (this.state.auth === false) {
       this.state.auth = true
     }
+    console.log("auth AFTER value: " + this.state.auth)
     return null
   };
 
@@ -114,7 +128,9 @@ class App extends React.Component {
           changeAuth={this.changeAuth}
           auth={this.state.auth}
           metaID={this.state.metaID}
+        
           />
+             
       case 'auth':
         return <AuthKeppin
           authCallback={this.authCallback} 
@@ -132,10 +148,12 @@ class App extends React.Component {
     }
   }
   changeAuth (state, props) {
+    
   }
   backToMain () {
     this.setState({ selectTopic: 'main' })
   }
+
   resume () {
     const { gameData } = this.state
     let isOver = gameData.get('over')
@@ -145,6 +163,7 @@ class App extends React.Component {
       auth: false
     })
   }
+
   startGame (loadGameData) {
     gameScript.application(this.getGameData, this.updateGameData, loadGameData)
     this.setState({
@@ -153,7 +172,9 @@ class App extends React.Component {
       login: false,
       auth: false })
   }
+
   showRank () {
+    console.log("We are in show")
     this.setState({ selectTopic: 'rankBoard' })
     this.props = {
       auth: !this.state.auth
@@ -164,6 +185,7 @@ class App extends React.Component {
     this.setState({ auth: false})
     return null
   }
+
   loadGame (metaID) {
     if (this.state.auth) {
       let loadGameData = this.storage.getGameState(metaID)
@@ -172,7 +194,9 @@ class App extends React.Component {
       this.setState({ selectTopic: 'auth', authTopic: 'load' })
     }
   }
+
   saveGame (metaID) {
+    console.log(this.state.auth)
     if (this.state.auth) {
       const saveDate = {
         grid: this.state.gameData.get('grid'),
@@ -187,11 +211,17 @@ class App extends React.Component {
       this.setState({ selectTopic: 'auth', authTopic: 'save' })
     }
   }
+
   authCallback (_metaID) {
     console.log('come back App.js')
     this.setState({ selectTopic: 'rankBoard' })
     this.setState( { metaID: _metaID, auth: true, } )
+    
+    
+    
+
     switch (this.state.authTopic) {
+      
       case 'load':
         this.setState({ auth: true, authTopic: '' })
         this.loadGame(this.state.metaID)
@@ -212,10 +242,13 @@ class App extends React.Component {
         <div className='game-container'>
           {this.state.showMenu ? <div className='menu'>{this.getMenuScreen()}</div> : null}
           <Message />
+        
           <Grid />
           <div className='tile-container' />
         </div>
         {this.state.auth === false &&
+
+        
         <Explanation />
         }
         <hr />
@@ -223,4 +256,5 @@ class App extends React.Component {
     )
   }
 }
+
 export default App

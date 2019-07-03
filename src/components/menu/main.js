@@ -1,15 +1,19 @@
 import React from 'react'
 import { addBtnTouchListener } from '../../util'
+
 class Menu extends React.Component {
   constructor (props) {
     super(props)
     this.buttons = []
   }
+
   componentDidMount () {
     addBtnTouchListener(this.buttons)
   }
+
   render () {
     let data = this.props
+  
     return (
       <div>
         <p>Menu</p>
@@ -29,6 +33,7 @@ class Menu extends React.Component {
           Load Game
         </span>
       </div>
+      
     )
   }
 }

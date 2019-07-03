@@ -60,16 +60,16 @@ class AuthKeppin extends React.Component {
           var randomID = this.guid()
           console.log("randomID: " + randomID)
           if (this.storage.metaID === "DEFAULT_METAID") {
-            alert("Successfully created random Meta ID!")
+            console.log("Successfully created random Meta ID!")
             this.storage.metaID = randomID
-            alert("this.storage.metaID after: " + this.storage.metaID)
+            
           } else {
-            alert("PAPER: " + this.storage.metaID)
+         
             this.storage.metaID = "DEFAULT_METAID_ERROR"
             alert("Error has occurred. Cannot create unique METAID")
             
           }
-          alert("Calling back: " + this.storage.metaID)
+         
           this.props.authCallback(this.storage.metaID)
           return <AuthKeppin />
     

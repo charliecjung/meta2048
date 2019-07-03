@@ -27,7 +27,7 @@ class App extends React.Component {
         
       }),
       auth: false,
-      APPMETAID: -999,
+     
       metaID: -888,
       authTopic: '',
       firstUse: true,
@@ -128,7 +128,7 @@ class App extends React.Component {
           changeAuth={this.changeAuth}
           auth={this.state.auth}
           metaID={this.state.metaID}
-          APPMETAID={this.state.APPMETAID}
+        
           />
              
       case 'auth':
@@ -215,8 +215,8 @@ class App extends React.Component {
   authCallback (_metaID) {
     console.log('come back App.js')
     this.setState({ selectTopic: 'rankBoard' })
-    this.setState( { metaID: _metaID, auth: true, APPMETAID:  _metaID} )
-    alert("auth metaid: " + this.state.metaID)
+    this.setState( { metaID: _metaID, auth: true, } )
+    
     
     
 

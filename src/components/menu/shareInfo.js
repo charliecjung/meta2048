@@ -24,8 +24,8 @@ class ShareInfo extends React.Component {
 
   render () {
     let data = this.props
-    const shareUrl = "https://www.github.com"
-    const title = "Github"
+    const shareUrl = "https://www.metadium.com/"
+    const title = "Metadium Home Page"
     return (
 
     <div className="share-component">

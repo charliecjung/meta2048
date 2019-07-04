@@ -58,10 +58,10 @@ class App extends React.Component {
   }
   registerScore () {
     this.setState({ selectTopic: 'auth'})
-    let data = this.props
-    if (this.state.auth === false) {
-      this.state.auth = true
-    }
+    //let data = this.props
+    //if (this.state.auth === false) {
+    //  this.state.auth = true
+    //}
     return null
   };
   updateGameData (_state) {

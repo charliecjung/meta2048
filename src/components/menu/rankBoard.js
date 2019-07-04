@@ -37,7 +37,6 @@ class RankBoard extends React.Component {
     } else {
       this.resetList();
     }
-    var auth = this.props.auth
     return this.props.users.map((user, index) => (
       
       <React.Fragment>

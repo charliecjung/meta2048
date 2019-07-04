@@ -39,21 +39,32 @@ class RankBoard extends React.Component {
     }
     var auth = this.props.auth
     return this.props.users.map((user, index) => (
-      <div>
+      
+      <React.Fragment>
+       
+      <div id="test">
+        <table>
       {this.props.auth === true && user.name.toUpperCase() === this.storage.username.toUpperCase() ? (
-        <tr key={index}>
-        <td><mark>{user.rank}</mark></td>
-        <td><mark>{user.name}</mark></td>
-        <td><mark>{user.score}</mark></td>
+        <tr key={index} style={{textAlignVertical: "center",textAlign: "center", padding: "0px"} }>
+        <td style={{textAlignVertical: "center",textAlign: "center"}}><mark>{user.rank}</mark></td>
+        <br />
+        <td style={{textAlignVertical: "center",textAlign: "center"}}><mark>{user.name}</mark></td>
+        <br />
+        <td style={{textAlignVertical: "center",textAlign: "center"}}><mark>{user.score}</mark></td>
+        
       </tr>
       ) : (
-        <tr key={index}>
-        <td>{user.rank}</td>
-        <td>{user.name}</td>
-        <td>{user.score}</td>
+        <tr key={index} style={{textAlignVertical: "center",textAlign: "center", padding: "0px"} }>
+        <td style={{textAlignVertical: "center",textAlign: "center"}}>{user.rank}</td>
+        <br />
+        <td style={{textAlignVertical: "center",textAlign: "center"}}>{user.name}</td>
+        <br />
+        <td style={{textAlignVertical: "center",textAlign: "center"}}>{user.score}</td>
       </tr>
       )}
+      </table>
       </div>
+      </React.Fragment>
     ))
   }
   render () {
@@ -65,9 +76,8 @@ class RankBoard extends React.Component {
         <table className='padding-table-columns' align='center'>
           <thead key='head'>
             <tr>
-              <th align='center'>Rank</th>
-              <th align='center'>Player</th>
-              <th align='center'>Score</th>
+              <th>RankPlayerScore</th>
+
             </tr>
           </thead>
           <tbody>{this.getRankTable()}</tbody>
@@ -86,9 +96,7 @@ class RankBoard extends React.Component {
         <table className='padding-table-columns' align='center'>
           <thead key='head'>
             <tr>
-              <th align='left'>Rank</th>
-              <th align='left'>Player</th>
-              <th align='left'>Score</th>
+            <th>RankPlayerScore</th>
             </tr>
           </thead>
           <tbody>{this.getRankTable()}</tbody>

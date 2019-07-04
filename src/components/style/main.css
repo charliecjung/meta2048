@@ -1,4 +1,20 @@
 @import url(fonts/clear-sans.css);
+table {
+  border-collapse: separate;
+  border-spacing: 50px 0;
+}
+
+td {
+  margin: 0;
+  padding: 0;
+  border: 2px solid black;
+  padding: 4px 17px;
+  width: 100%;
+  float:center;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  background: #f0f4fc;
+}
 html, body {
   margin: 0;
   padding: 0;

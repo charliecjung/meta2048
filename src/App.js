@@ -6,7 +6,8 @@ import gameScript from './components/js'
 import constants from './constants'
 import Storage from './storage'
 import { Heading, Above, Message, Grid, Explanation } from './components/game'
-import { Menu, RankBoard, AuthKeppin } from './components/menu'
+import { Menu, RankBoard, AuthKeppin} from './components/menu'
+import ShareInfo from './components/menu/shareInfo.js'
 class App extends React.Component {
   constructor (props) {
     super(props)
@@ -45,6 +46,7 @@ class App extends React.Component {
     //registerScore's displayRanking method
     this.registerScore = this.registerScore.bind(this)
     this.createAuth = this.createAuth.bind(this)
+    this.shareInformation = this.shareInformation.bind(this)
   }
   componentDidMount () {
     gameScript.classlist_polyfill()
@@ -78,6 +80,9 @@ class App extends React.Component {
     const terminated = this.state.showMenu || this.state.gameData.get('over') || (this.state.gameData.get('won') && !this.state.gameData.get('keepPlaying'))
     if (gameData.get('terminated') !== terminated) this.setState({ gameData: gameData.set('terminated', terminated) })
   }
+  shareInformation() {
+    this.setState ( { selectTopic: 'shareInfo'})
+  }
   // related with menu
   showMenu () {
     const { gameData } = this.state
@@ -91,6 +96,7 @@ class App extends React.Component {
     let topic = this.state.selectTopic
     let isFirstTime = this.state.firstUse
     switch (topic) {
+      
       case 'rankBoard':
         return <RankBoard
           registerScore={this.registerScore}
@@ -98,11 +104,15 @@ class App extends React.Component {
           createAuth={this.createAuth}
           auth={this.state.auth}
           metaID={this.state.metaID}      
+          shareInformation={this.shareInformation}
           />           
       case 'auth':
         return <AuthKeppin
           authCallback={this.authCallback} 
            />
+      case 'shareInfo':
+        return <ShareInfo
+        />
       default:
         return <Menu
           isFirstTime={isFirstTime}

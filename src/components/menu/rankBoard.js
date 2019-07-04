@@ -83,6 +83,7 @@ class RankBoard extends React.Component {
           <tbody>{this.getRankTable()}</tbody>
         </table>
         <span className='register-rankboard btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.registerScore()}>Register Score</span>
+        <span className='share btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.shareInformation()}>Share with the World!</span>
         <h2> Your Name: {this.storage.myName}</h2>
         <h2> Your Rank: {this.storage.myRank} </h2>
         <h2> Your Score: {this.storage.myScore} </h2> 
@@ -102,7 +103,9 @@ class RankBoard extends React.Component {
           <tbody>{this.getRankTable()}</tbody>
         </table>
         <span className='register-rankboard btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.registerScore()}>Register Score</span>
+        <span className='share btn' ref={ref => { this.buttons.push(ref) }} onClick={() => data.shareInformation()}>Share with the World!</span>
       </div>
+
     )
   }
 }
